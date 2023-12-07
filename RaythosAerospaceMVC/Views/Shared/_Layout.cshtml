@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null; // No layout initially
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Add your meta tags, title, styles, and scripts here -->
+    <link rel="stylesheet" href="~/Content/site.css" /> <!-- Include CSS reference here -->
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 sidebar-light" id="hideclass">
+                <!-- Left Sidebar -->
+                <h3>Left Sidebar</h3>
+                <!-- Your sidebar content -->
+                <ul class="nav nav-pills nav-stacked">
+                    <li><button id="btnHome" class="btn btn-link">Home</button></li>
+                    <li><button id="btnAbout" class="btn btn-link">About</button></li>
+                    <li><button id="btnContact" class="btn btn-link">Contact</button></li>
+                    <li><button id="btnLogout" class="btn btn-link">Logout</button></li>
+                </ul>
+            </div>
+            <div class="col-md-9" id="content">
+                @RenderBody() <!-- This is where the content of individual views will be injected -->
+            </div>
+            <div class="col-md-3 right-sidebar" id="rightSidebar">
+                <!-- Right sidebar content here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="~/bundles/jquery"></script>
+    <script src="~/bundles/bootstrap"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Your existing click event handlers for sidebar buttons
+            $('#btnHome').click(function () {
+                $('#content').load('@Url.Action("Index", "Home")');
+                $('#rightSidebar').hide();
+            });
+
+            $('#btnAbout').click(function () {
+                $('#content').load('@Url.Action("About", "Home")');
+                $('#rightSidebar').hide();
+            });
+
+            $('#btnContact').click(function () {
+                $('#content').load('@Url.Action("Contact", "Home")');
+                $('#rightSidebar').hide();
+            });
+
+            $('#btnLogout').click(function () {
+                // Handle logout functionality here and redirect to the login page
+                window.location.href = '@Url.Action("Login", "User")';
+            });
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

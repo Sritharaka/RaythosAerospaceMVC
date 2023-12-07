@@ -1,0 +1,19 @@
+﻿@model RaythosAerospaceMVC.Models.User
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        <!--<h4 class="alert-heading">Validation Errors!</h4>-->
+        <ul>
+            @foreach (var modelState in ViewData.ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    </div>
+}
+
+<!-- Rest of your login form and HTML -->

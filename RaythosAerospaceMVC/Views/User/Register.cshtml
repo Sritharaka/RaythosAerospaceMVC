@@ -1,0 +1,98 @@
+﻿@model RaythosAerospaceMVC.Models.User
+
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = null; // No layout initially
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - My ASP.NET Application</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Include Bootstrap CSS or other necessary styles -->
+</head>
+<body>
+    <div class="container" style="margin-top: 50px; margin-left: 30%">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2>Sign Up</h2>
+
+                <form asp-action="Register" asp-controller="User" method="post">
+                    <input type="hidden" asp-for="Id" /> <!-- If needed, replace 'Id' with the actual property name in your User model -->
+
+                   <br/>  <div class="form-group">
+                        <label asp-for="Username"></label>
+                        <input asp-for="Username" class="form-control" required="required" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                   <br/>  <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" required="required" type="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                   <br/>  <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" required="required" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                   <br/>  <div class="form-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" required="required" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                 <br/>  <button type="submit" class="btn btn-primary">Sign Up</button>
+                </form>
+
+                <div class="form-group">
+                    <br />
+                    <p>Already have an account? <a asp-action="Login" asp-controller="User">Login</a></p>
+                </div>
+
+                <span id="passwordError" style="display: none; color: red;">Passwords do not match.</span>
+
+                <div class="text-center text-danger">
+                    <partial name="_ValidationSummary" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Include jQuery and Bootstrap JS -->
+
+    <script>
+        $(document).ready(function () {
+            $('#ConfirmPassword').on('keyup', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $(this).val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').show();
+                } else {
+                    $('#passwordError').hide();
+                }
+            });
+
+            $('form').on('submit', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $('#ConfirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').show();
+                    return false; // Prevent form submission if passwords don't match
+                }
+
+                return true; // Allow form submission if passwords match
+            });
+        });
+    </script>
+</body>
+</html>
