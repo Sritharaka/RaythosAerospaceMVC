@@ -20,3 +20,48 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*////////////////////////////////////*/
+
+/* Content Styles */
+
+
+
+/* Responsive Layout (Commented out) */
+/*
+@media (max-width: 767px) {
+  // Add responsive styles for smaller screens
+}
+*/
+
+/* Set sidebar and content widths */
+/*.sidebar-light {
+    width: 10%;
+    float: left;
+}
+
+#content {
+    width: 90%;
+    float: left;
+}*/
+
+/* Additional styles for sidebar and content */
+/*.sidebar-light {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.nav-pills li {
+    margin-bottom: 5px;
+}*/
+
+/* Additional styles for buttons */
+/*.btn-link {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}*/
+
+
+

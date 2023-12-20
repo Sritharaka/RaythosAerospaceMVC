@@ -6,26 +6,133 @@
 <html>
 <head>
     <!-- Add your meta tags, title, styles, and scripts here -->
-    <link rel="stylesheet" href="~/Content/site.css" /> <!-- Include CSS reference here -->
+    <link rel="stylesheet" href="~/css/site.css" /> <!-- Include CSS reference here -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        /* Set sidebar and content widths */
+        .sidebar-light {
+            width: 10%;
+            float: left;
+            height: 673px;
+        }
+
+        #content {
+            width: 80%; /* Adjusted to accommodate both content and right sidebar */
+            float: left;
+            margin-right: 10px; /* Spacing between content and right sidebar */
+            height: 100%;
+        }
+
+        .right-sidebar {
+            width: 10%;
+            float: left;
+        }
+
+        /* Additional styles for sidebar and content */
+        .sidebar-light {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            height: 673px;
+        }
+
+        .nav-pills li {
+            margin-bottom: 5px;
+        }
+
+        /* Additional styles for buttons */
+        .btn-link {
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+
+        /* Button hover color */
+        .btn-outline-primary:hover {
+            color: #fff; /* Text color on hover */
+            background-color: #0076CE; /* Light blue background on hover */
+            border-color: #0076CE; /* Light blue border on hover */
+        }
+
+        /* Additional styling for the PNG icon */
+        .nav-item a img {
+            vertical-align: middle; /* Align the icon with text */
+            margin-left: -120px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Aerospace</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Privacy", "Home")">Privacy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Login", "User")">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 sidebar-light" id="hideclass">
+            <div class="col-md-2 sidebar-light" id="hideclass">
                 <!-- Left Sidebar -->
                 <h3>Left Sidebar</h3>
                 <!-- Your sidebar content -->
-                <ul class="nav nav-pills nav-stacked">
-                    <li><button id="btnHome" class="btn btn-link">Home</button></li>
-                    <li><button id="btnAbout" class="btn btn-link">About</button></li>
-                    <li><button id="btnContact" class="btn btn-link">Contact</button></li>
-                    <li><button id="btnLogout" class="btn btn-link">Logout</button></li>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Home")" id="btnHome" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Privacy", "Home")" id="btnPrivacy" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            Privacy
+                        </a>
+                    </li>
+                    <!-- Add other navigation buttons as needed -->
+                    <li class="nav-item">
+                        <a href="@Url.Action("Contact", "Home")" id="btnContact" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            Contact
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Login", "User")" id="btnLogout" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            Logout
+                        </a>
+                    </li>
                 </ul>
             </div>
-            <div class="col-md-9" id="content">
+
+
+            <div class="col-md-8" id="content">
                 @RenderBody() <!-- This is where the content of individual views will be injected -->
             </div>
-            <div class="col-md-3 right-sidebar" id="rightSidebar">
+            <div class="col-md-2 right-sidebar" id="rightSidebar">
                 <!-- Right sidebar content here -->
             </div>
         </div>
@@ -34,30 +141,32 @@
     <script src="~/bundles/jquery"></script>
     <script src="~/bundles/bootstrap"></script>
 
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+@*
     <script>
         $(document).ready(function () {
-            // Your existing click event handlers for sidebar buttons
-            $('#btnHome').click(function () {
-                $('#content').load('@Url.Action("Index", "Home")');
+            // Click event handlers for sidebar buttons
+            $('#btnHome').click(function (e) {
+                e.preventDefault();
+                $('#content').load($(this).attr('href'));
                 $('#rightSidebar').hide();
             });
 
-            $('#btnAbout').click(function () {
-                $('#content').load('@Url.Action("About", "Home")');
+            $('#btnPrivacy').click(function (e) {
+                e.preventDefault();
+                $('#content').load($(this).attr('href'));
                 $('#rightSidebar').hide();
             });
 
-            $('#btnContact').click(function () {
-                $('#content').load('@Url.Action("Contact", "Home")');
-                $('#rightSidebar').hide();
-            });
-
-            $('#btnLogout').click(function () {
-                // Handle logout functionality here and redirect to the login page
-                window.location.href = '@Url.Action("Login", "User")';
-            });
+            // Add click event handlers for other buttons similarly
         });
-    </script>
+    </script>*@
 
     @RenderSection("scripts", required: false)
 </body>

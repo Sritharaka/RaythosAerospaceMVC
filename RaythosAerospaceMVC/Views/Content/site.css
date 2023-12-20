@@ -1,0 +1,33 @@
+﻿/* Content Styles */
+
+.container {
+    margin-top: 20px;
+}
+
+.sidebar-light {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.nav-pills li {
+    margin-bottom: 5px;
+}
+
+.right-sidebar {
+    /* Add styles for the right sidebar */
+}
+
+/* Button Styles */
+
+.btn-link {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Responsive Layout */
+
+@media (max-width: 767px) {
+    /* Add responsive styles for smaller screens */
+}
