@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaythosAerospaceMVC.Models;
 
@@ -11,9 +12,11 @@ using RaythosAerospaceMVC.Models;
 namespace RaythosAerospaceMVC.Migrations
 {
     [DbContext(typeof(AerospaceDbContext))]
-    partial class AerospaceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231221110200_InitialSc1")]
+    partial class InitialSc1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace RaythosAerospaceMVC.Migrations
                     b.Property<decimal?>("BasePrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedDate")
@@ -66,7 +69,7 @@ namespace RaythosAerospaceMVC.Migrations
                     b.Property<string>("ModelName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("SeatingCapacity")
+                    b.Property<decimal?>("Range")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SeatingType")

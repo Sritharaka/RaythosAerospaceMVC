@@ -9,5 +9,6 @@ namespace RaythosAerospaceMVC.Models
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Aircraft> Aircrafts { get; set; }
     }
 }

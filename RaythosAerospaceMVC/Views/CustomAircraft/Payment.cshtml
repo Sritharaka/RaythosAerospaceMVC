@@ -1,0 +1,204 @@
+﻿@model Aircraft
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Payment</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.15.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.15.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Your custom CSS or additional styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+
+</head>
+<body>
+    <div class="container mt-4" id="containerToUpdate">
+        <h3>Card Payment</h3>
+        <form asp-action="PaymentComplete" method="post" enctype="multipart/form-data" id="subMitIdCompleted">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="ModelName">Aircraft Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                            <input asp-for="ModelName" id="ModelName" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ModelName ?? "")" readonly />
+                            <input asp-for="Id" id="Id" name="Id" class="form-control @(ViewData.ModelState.ContainsKey("Id") && ViewData.ModelState["Id"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Id.ToString() ?? "")" readonly />
+                        </div>
+                        <span asp-validation-for="ModelName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Manufacturer">Manufacturer</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <input asp-for="Manufacturer" id="Manufacturer" name="Manufacturer" class="form-control @(ViewData.ModelState.ContainsKey("Manufacturer") && ViewData.ModelState["Manufacturer"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Manufacturer ?? "")" readonly />
+                        </div>
+                        <span asp-validation-for="Manufacturer" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="InteriorDesign">Interior Design</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-palette"></i></span>
+                            <input asp-for="InteriorDesign" id="InteriorDesign" name="InteriorDesign" class="form-control @(ViewData.ModelState.ContainsKey("InteriorDesign") && ViewData.ModelState["InteriorDesign"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InteriorDesign ?? "")" />
+                        </div>
+                        <span asp-validation-for="InteriorDesign" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="SeatingType">Seating Type</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-list-stars"></i></span>
+                            <input asp-for="SeatingType" id="SeatingType" name="SeatingType" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingType ?? "")" />
+                        </div>
+                        <span asp-validation-for="SeatingType" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="EngineType">Engine Type</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-gear"></i></span>
+                            <input asp-for="EngineType" id="EngineType" name="EngineType" class="form-control @(ViewData.ModelState.ContainsKey("EngineType") && ViewData.ModelState["EngineType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.EngineType ?? "")" disabled />
+                        </div>
+                        <span asp-validation-for="EngineType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="MaximumSpeed">Maximum Speed (km/h)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-speedometer2"></i></span>
+                            <input asp-for="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.MaximumSpeed.ToString() ?? "")" disabled />
+                        </div>
+                        <span asp-validation-for="MaximumSpeed" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="SeatingCapacity">Seating Capacity</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input asp-for="SeatingCapacity" id="SeatingCapacity" name="SeatingCapacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingCapacity.ToString() ?? "")" />
+                        </div>
+                        <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="FuelCapacity">Fuel Capacity (L)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-droplet-half"></i></span>
+                            <input asp-for="FuelCapacity" id="FuelCapacity" name="FuelCapacity" class="form-control @(ViewData.ModelState.ContainsKey("FuelCapacity") && ViewData.ModelState["FuelCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.FuelCapacity.ToString() ?? "")" />
+                        </div>
+                        <span asp-validation-for="FuelCapacity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="uploadedImage">Aircraft Image</label>
+                        <input asp-for="uploadedImage" id="uploadedImage" name="uploadedImage" type="file" class="form-control-file @(ViewData.ModelState.ContainsKey("uploadedImage") && ViewData.ModelState["uploadedImage"].Errors.Count > 0 ? "is-invalid" : "")" />
+                        <span asp-validation-for="uploadedImage" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Weight">Weight (kg)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-bag-check"></i></span>
+                            <input asp-for="Weight" name="Weight" class="form-control @(ViewData.ModelState.ContainsKey("Weight") && ViewData.ModelState["Weight"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Weight.ToString() ?? "")" disabled />
+                        </div>
+                        <span asp-validation-for="Weight" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Include input fields for the remaining properties -->
+            <div class="form-group">
+                <label asp-for="AdditionalFeatures">Additional Features</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                    <textarea asp-for="AdditionalFeatures" class="form-control @(ViewData.ModelState.ContainsKey("AdditionalFeatures") && ViewData.ModelState["AdditionalFeatures"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
+                </div>
+                <span asp-validation-for="AdditionalFeatures" class="text-danger"></span>
+            </div>
+
+
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <label asp-for="BasePrice">Total Price (USD)</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                    <input asp-for="BasePrice" id="BasePrice" name="BasePrice" class="form-control @(ViewData.ModelState.ContainsKey("BasePrice") && ViewData.ModelState["BasePrice"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.BasePrice.ToString() ?? "")" disabled style="color: maroon;" />
+                </div>
+                <span asp-validation-for="BasePrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" name="cardNumber" class="form-control"  placeholder="Enter card number" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="expiryDate">Expiration Date</label>
+                    <input type="text" id="expiryDate" name="expiryDate" class="form-control"  placeholder="MM/YY" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="form-control"  placeholder="CVV" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cardHolderName">Cardholder Name</label>
+                <input type="text" class="form-control" id="cardHolderName" placeholder="Enter cardholder's name" required>
+            </div>
+
+        
+
+            <button type="submit" class="btn btn-primary">Submit Payment</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and other scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Your custom scripts or additional JavaScript -->
+    <script>
+        // JavaScript logic for form submission, validation, and payment processing
+        $('#paymentForm').submit(function (event) {
+            event.preventDefault();
+            // Handle payment processing here
+        });
+    </script>
+</body>
+</html>

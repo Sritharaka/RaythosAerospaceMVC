@@ -113,5 +113,20 @@ namespace RaythosAerospaceMVC.Repository
             return enteredPasswordHash == storedPasswordHash;
         }
 
+        public User GetUser(string email)
+        {
+            // Find the user by email (assuming email is unique)
+            var user = _context.Users.SingleOrDefault(u => u.Email == email);
+
+            if (user != null)
+            {
+                // If the user is found and the password is correct
+                return user;
+            }
+
+            // Return null if the user is not found or the password is incorrect
+            return null;
+        }
+
     }
 }

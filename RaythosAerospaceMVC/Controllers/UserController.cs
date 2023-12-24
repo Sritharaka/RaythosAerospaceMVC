@@ -78,11 +78,16 @@ namespace RaythosAerospaceMVC.Controllers
                 ///
                 if (result != null)
                 {
-                    //    // User authenticated, perform further actions like setting authentication cookies or redirecting to a dashboard
-                    //    // For example:
-                    //    // FormsAuthentication.SetAuthCookie(user.Email, false);
-                    //    return RedirectToAction("RegisterSuccess"); // Replace "RegisterSuccess" with your desired action name
-                    return RedirectToAction("Index", "Home"); // Redirect to Home/Index upon successful login
+                //    // User authenticated, perform further actions like setting authentication cookies or redirecting to a dashboard
+                //    // For example:
+                //    // FormsAuthentication.SetAuthCookie(user.Email, false);
+                //    return RedirectToAction("RegisterSuccess"); // Replace "RegisterSuccess" with your desired action name
+                var user = _userRepository.GetUser(newUser.Email);
+
+                int userId = user.Id;
+                HttpContext.Session.SetInt32("UserId", userId); // Store in session
+
+                return RedirectToAction("Index", "Home"); // Redirect to Home/Index upon successful login
 
                 }
 
@@ -115,6 +120,10 @@ namespace RaythosAerospaceMVC.Controllers
                 // For example:
                 // FormsAuthentication.SetAuthCookie(user.Email, false);
                 // return RedirectToAction("Dashboard", "Home");
+
+                int userId = user.Id;
+                HttpContext.Session.SetInt32("UserId", userId); // Store in session
+
                 return RedirectToAction("Index", "Home"); // Redirect to Home/Index upon successful login
 
             }

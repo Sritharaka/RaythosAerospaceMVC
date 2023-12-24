@@ -1,0 +1,322 @@
+﻿@model Aircraft
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Add your HTML head content -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.15.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Your custom CSS or additional styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<body>
+    
+    <div class="container" style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+        <h3 style="margin-bottom:40px;">Aircraft Details</h3>
+
+        <!-- Displaying aircraft details -->
+
+        <div class="container">
+
+            <img src="@Url.Content("/" + Model.ImageUrl)" alt="Aircraft Image" style="max-width: 100%; height: auto; margin-bottom:40px;">
+            <h5 class="card-title"><i class="bi bi-airplane"></i> @Model.ModelName</h5>
+            <p class="card-text"><i class="bi bi-building"></i> Manufacturer: @Model.Manufacturer</p>
+            <p class="card-text"><i class="bi bi-list-stars"></i> Seating Type: @Model.SeatingType</p>
+            <p class="card-text"><i class="bi bi-palette"></i> Interior Design: @Model.InteriorDesign</p>
+            <p class="card-text"><i class="bi bi-gear"></i> Engine Type: @Model.EngineType</p>
+            <p class="card-text"><i class="bi bi-speedometer2"></i> Maximum Speed: @Model.MaximumSpeed km/h</p>
+            <p class="card-text"><i class="bi bi-person"></i> Seating Capacity: @Model.SeatingCapacity</p>
+            <p class="card-text"><i class="bi bi-droplet-half"></i> Fuel Capacity: @Model.FuelCapacity</p>
+            <p class="card-text"><i class="bi bi-bag-check"></i> Weight: @Model.Weight</p>
+            <p class="card-text"><i class="bi bi-currency-dollar"></i> Base Price: <span style="color: maroon;">@Model.BasePrice USD</span></p>
+            <p class="card-text"><i class="bi bi-card-text"></i> Description: @Model.Description</p>
+
+            <!-- Add other properties similarly with their respective icons -->
+            <!-- Include other input fields for additional data -->
+        </div>
+
+
+        <div style="margin-top: 40px;">
+
+            <h5 style="margin-bottom:40px;">Payment Details</h5>
+
+
+            <form asp-action="Payment" method="post" enctype="multipart/form-data" id="subMitId">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="ModelName">Aircraft Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                <input asp-for="ModelName" id="ModelName" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ModelName ?? "")" disabled />
+                                <input asp-for="ModelName" id="ModelName" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ModelName ?? "")" style="display:none" />
+                                <input asp-for="Id" id="Id" name="Id" class="form-control @(ViewData.ModelState.ContainsKey("Id") && ViewData.ModelState["Id"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Id.ToString() ?? "")" style="display:none" />
+                            </div>
+                            <span asp-validation-for="ModelName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="Manufacturer">Manufacturer</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-building"></i></span>
+                                <input asp-for="Manufacturer" id="Manufacturer" name="Manufacturer" class="form-control @(ViewData.ModelState.ContainsKey("Manufacturer") && ViewData.ModelState["Manufacturer"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Manufacturer ?? "")" readonly />
+                            </div>
+                            <span asp-validation-for="Manufacturer" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="InteriorDesign">Interior Design</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-palette"></i></span>
+                                <input asp-for="InteriorDesign" id="InteriorDesign" name="InteriorDesign" class="form-control @(ViewData.ModelState.ContainsKey("InteriorDesign") && ViewData.ModelState["InteriorDesign"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InteriorDesign ?? "")" />
+                            </div>
+                            <span asp-validation-for="InteriorDesign" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="SeatingType">Seating Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-list-stars"></i></span>
+                                <input asp-for="SeatingType" id="SeatingType" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingType ?? "")" />
+                            </div>
+                            <span asp-validation-for="SeatingType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="EngineType">Engine Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-gear"></i></span>
+                                <input asp-for="EngineType" id="EngineType" name="EngineType" class="form-control @(ViewData.ModelState.ContainsKey("EngineType") && ViewData.ModelState["EngineType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.EngineType ?? "")" readonly />
+                            </div>
+                            <span asp-validation-for="EngineType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="MaximumSpeed">Maximum Speed (km/h)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-speedometer2"></i></span>
+                                <input asp-for="MaximumSpeed" id="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.MaximumSpeed.ToString() ?? "")" readonly />
+                            </div>
+                            <span asp-validation-for="MaximumSpeed" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="SeatingCapacity">Seating Capacity</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="SeatingCapacity" id="SeatingCapacity" name="SeatingCapacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingCapacity.ToString() ?? "")" />
+                            </div>
+                            <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="FuelCapacity">Fuel Capacity (L)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-droplet-half"></i></span>
+                                <input asp-for="FuelCapacity" id="FuelCapacity" class="form-control @(ViewData.ModelState.ContainsKey("FuelCapacity") && ViewData.ModelState["FuelCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.FuelCapacity.ToString() ?? "")" />
+                            </div>
+                            <span asp-validation-for="FuelCapacity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="uploadedImage">Aircraft Image</label>
+                            <input asp-for="uploadedImage" id="uploadedImage" type="file" class="form-control-file @(ViewData.ModelState.ContainsKey("uploadedImage") && ViewData.ModelState["uploadedImage"].Errors.Count > 0 ? "is-invalid" : "")" />
+                            <span asp-validation-for="uploadedImage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label asp-for="Weight">Weight (kg)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-bag-check"></i></span>
+                                <input asp-for="Weight" class="form-control @(ViewData.ModelState.ContainsKey("Weight") && ViewData.ModelState["Weight"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Weight.ToString() ?? "")"  readonly/>
+                            </div>
+                            <span asp-validation-for="Weight" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Include input fields for the remaining properties -->
+                <div class="form-group">
+                    <label asp-for="AdditionalFeatures">Additional Features</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                        <textarea asp-for="AdditionalFeatures" class="form-control @(ViewData.ModelState.ContainsKey("AdditionalFeatures") && ViewData.ModelState["AdditionalFeatures"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
+                    </div>
+                    <span asp-validation-for="AdditionalFeatures" class="text-danger"></span>
+                </div>
+
+               
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <label asp-for="BasePrice">Total Price (USD)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                        <input asp-for="BasePrice" id="BasePrice" name="BasePrice" class="form-control @(ViewData.ModelState.ContainsKey("BasePrice") && ViewData.ModelState["BasePrice"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.BasePrice.ToString() ?? "")" style="color: maroon;" readonly />
+                    </div>
+                    <span asp-validation-for="BasePrice" class="text-danger"></span>
+                </div>
+
+                <div class="form-group" style="margin-top: 40px; margin-bottom:80px;">
+                    <button type="submit" id="submitAircraft" class="btn btn-primary">
+                        <i class="bi bi-cart-check-fill"></i> Add To Cart
+                    </button>
+                </div>
+            </form>
+
+        </div>
+
+
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+
+            var IntialInteriorDesign = $('#InteriorDesign').val();
+            var IntialSeatingType = $('#SeatingType').val();
+            var IntialSeatingCapacity = parseFloat($('#SeatingCapacity').val());
+            var IntialFuelCapacity = parseFloat($('#FuelCapacity').val());
+            var intialBasePrice = parseFloat($('#BasePrice').val());
+            var fileInputInteracted = false; // Flag to track file input interaction
+
+
+
+            $('#InteriorDesign, #SeatingType, #SeatingCapacity, #FuelCapacity').on('input', function () {
+                calculateBasePrice();
+            });
+
+            $('#uploadedImage').on('change', function () {
+                fileInputInteracted = true; // Set the flag to true when file input changes
+                calculateBasePrice();
+            });
+
+            function calculateBasePrice() {
+                var interiorDesign = $('#InteriorDesign').val();
+                var seatingType = $('#SeatingType').val();
+                var seatingCapacity = parseFloat($('#SeatingCapacity').val());
+                var fuelCapacity = parseFloat($('#FuelCapacity').val());
+                var basePrice = 0;
+
+
+                var newInteriorDesignValue = 0;
+
+                // Check if the value has changed and perform calculations accordingly
+                if (interiorDesign === "semi luxury" && interiorDesign != IntialInteriorDesign) {
+                    newInteriorDesignValue = -2000;
+                } else if (interiorDesign === "super luxury" && interiorDesign != IntialInteriorDesign) {
+                    newInteriorDesignValue = 2000;
+                } else if (interiorDesign === "luxury" && interiorDesign != IntialInteriorDesign) {
+                    newInteriorDesignValue = 1000;
+                } else if (interiorDesign != IntialInteriorDesign) {
+                    newInteriorDesignValue = 500;
+
+                }
+
+                var newSeatingCapacityValue = 0;
+
+                // Check if the value has changed and perform calculations accordingly
+                if (IntialSeatingCapacity - seatingCapacity >= -50 && seatingCapacity != IntialSeatingCapacity) {
+                    newSeatingCapacityValue = -3000;
+                } else if (IntialSeatingCapacity - seatingCapacity >= -1 && seatingCapacity != IntialSeatingCapacity) {
+                    newSeatingCapacityValue = -1000;
+                } else if (IntialSeatingCapacity - seatingCapacity < 50 && seatingCapacity != IntialSeatingCapacity) {
+                    newSeatingCapacityValue = 2000;
+                } else if (IntialSeatingCapacity - seatingCapacity >= 50 && seatingCapacity != IntialSeatingCapacity) {
+                    newSeatingCapacityValue = 5000;
+
+                }
+
+                var newSeatingTypeValue = 0;
+
+                // Check if the value has changed and perform calculations accordingly
+                if (seatingType === "economy" && seatingType != IntialSeatingType) {
+                    newSeatingTypeValue = -5000;
+                } else if (seatingType === "business" && seatingType != IntialSeatingType) {
+                    newSeatingTypeValue = 3000;
+                } else if (seatingType === "first class" && seatingType != IntialSeatingType) {
+                    newSeatingTypeValue = 5000;
+                } else if (seatingType != IntialSeatingType) {
+                    newSeatingTypeValue = 2000;
+
+                }
+
+                var newfuelCapacityValue = 0;
+
+                // Check if the value has changed and perform calculations accordingly
+                if (IntialFuelCapacity - fuelCapacity >= -50 && fuelCapacity != IntialFuelCapacity) {
+                    newfuelCapacityValue = -1500;
+                } else if (IntialFuelCapacity - fuelCapacity >= -1 && fuelCapacity != IntialFuelCapacity) {
+                    newfuelCapacityValue = -1000;
+                } else if (IntialFuelCapacity - fuelCapacity < 50 && fuelCapacity != IntialFuelCapacity) {
+                    newfuelCapacityValue = 500;
+                } else if (IntialFuelCapacity - fuelCapacity >= 50 && fuelCapacity != IntialFuelCapacity) {
+                    newfuelCapacityValue = 1000;
+
+                }
+
+
+                var newImageFileValue = 0;
+                if (fileInputInteracted) {
+                    // Update BasePrice by 5000
+                    newImageFileValue = 5000;
+                }
+
+                // Perform your calculation logic here based on the input values
+                // For example:
+                // Some simple calculation logic based on the provided inputs
+                var basePrice = intialBasePrice + newInteriorDesignValue + newSeatingTypeValue + newSeatingCapacityValue + newfuelCapacityValue + newImageFileValue;
+
+                $('#BasePrice').val(basePrice.toFixed(2)); // Display the calculated BasePrice
+            }
+
+        
+
+        });
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>

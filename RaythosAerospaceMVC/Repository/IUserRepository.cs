@@ -6,6 +6,7 @@ namespace RaythosAerospaceMVC.Repository
     {
         string AddUser(Models.User newUser);
         User AuthenticateUser(string email, string password);
+        User GetUser(string email);
         bool IsEmailAlreadyExists(string email);
     }
 }

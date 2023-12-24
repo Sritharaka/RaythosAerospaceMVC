@@ -19,7 +19,7 @@
         .sidebar-light {
             width: 10%;
             float: left;
-            height: 673px;
+            height: 1800px;
         }
 
         #content {
@@ -39,7 +39,7 @@
             background-color: #f4f4f4;
             padding: 10px;
             border: 1px solid #ddd;
-            height: 673px;
+            height: 1800px;
         }
 
         .nav-pills li {
@@ -62,14 +62,15 @@
 
         /* Additional styling for the PNG icon */
         .nav-item a img {
-            vertical-align: middle; /* Align the icon with text */
-            margin-left: -120px;
+            vertical-align: middle; 
+            /*margin-left: -50px;*/
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <img src="~/images/plane11.png" alt="Icon" width="33" height="33" class="mr-2">
         <a class="navbar-brand" href="#">Aerospace</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,6 +83,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Privacy", "Home")">Privacy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Aircraft", "Home")">Aircraft</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a>
@@ -97,31 +101,43 @@
         <div class="row">
             <div class="col-md-2 sidebar-light" id="hideclass">
                 <!-- Left Sidebar -->
-                <h3>Left Sidebar</h3>
+                @*<h3>Left Sidebar</h3>*@
                 <!-- Your sidebar content -->
                 <ul class="nav flex-column">
-                    <li class="nav-item">
+                    <li class="nav-item" >
                         <a href="@Url.Action("Index", "Home")" id="btnHome" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
                             Home
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" >
+                        <a href="@Url.Action("Aircraft", "Aircraft")" id="btnAircraft" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/Catelog.png" alt="Icon" width="25" height="25" class="mr-2" style="margin-left:-30px">
+                            Aircraft Catalog
+                        </a>
+                    </li>
+         @*           <li class="nav-item" style="margin-left:-55px">
+                        <a href="@Url.Action("_DisplayAircraftTable", "Aircraft")" id="btnAircraft" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/Catelog.png" alt="Icon" width="25" height="25" class="mr-2">
+                            Aircraft List
+                        </a>
+                    </li>*@
+                    <li class="nav-item" >
                         <a href="@Url.Action("Privacy", "Home")" id="btnPrivacy" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
                             Privacy
                         </a>
                     </li>
                     <!-- Add other navigation buttons as needed -->
-                    <li class="nav-item">
+                    <li class="nav-item" >
                         <a href="@Url.Action("Contact", "Home")" id="btnContact" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
                             Contact
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" >
                         <a href="@Url.Action("Login", "User")" id="btnLogout" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2">
+                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
                             Logout
                         </a>
                     </li>

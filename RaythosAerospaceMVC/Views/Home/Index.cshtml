@@ -1,8 +1,77 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model List<Aircraft>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aircraft List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.15.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Your custom CSS or additional styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <div class="container mt-4" style="margin-left: 110px;">
+        <h3 style="margin-bottom: 50px;">Home</h3>
+        <div class="row">
+            @foreach (var aircraft in Model)
+            {
+                var aircraftId = @aircraft.Id;
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color:azure">
+                        <!-- Aircraft Image -->
+                        <img src="@Url.Content("/" + aircraft.ImageUrl)" class="card-img-top" alt="Aircraft Image" style="height: 200px; background-color:white">
+                        <div class="card-body">
+                            <h5 class="card-title"> <i class="bi bi-airplane"></i> @aircraft.ModelName </h5>
+                            <p class="card-text"> <i class="bi bi-building"></i> Manufacturer: @aircraft.Manufacturer </p>
+                            <!-- Displaying aircraft details with icons -->
+                            <p class="card-text"><i class="bi bi-speedometer2"></i> Maximum Speed: @aircraft.MaximumSpeed km/h</p>
+                            <p class="card-text"><i class="bi bi-person"></i> Seating Capacity: @aircraft.SeatingCapacity</p>
+                            <p class="card-text"><i class="bi bi-currency-dollar"></i> Price: <span style="color: maroon;">@aircraft.BasePrice USD</span></p>
+                            <!-- Add other relevant fields you want to display -->
+                            <!-- Example of a button to view more details -->
+                            <a href="/CustomAircraft/CustomAircraft/@aircraftId" class="btn btn-primary btn-block">
+                                <i class="bi bi-eye-fill"></i> View Details
+                            </a>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <!-- Bootstrap JS and other scripts -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Your custom scripts or additional JavaScript -->
+    <script>
+
+        //$(document).ready(function () {
+        //    $('.loadCustomViewBtn').on('click', function () {
+        //        var aircraftId = $(this).data('aircraft-id');
+
+        //        $.ajax({
+        //            url: '/CustomAircraft/CustomAircraft/' + aircraftId,
+        //            type: 'GET',
+        //            dataType: 'html',
+        //            success: function (response) {
+        //                $(`.customViewContainer[data-aircraft-id="${aircraftId}"]`).html(response);
+        //            },
+        //            error: function () {
+        //                alert('Failed to load custom view');
+        //            }
+        //        });
+        //    });
+        //});
+
+
+    </script>
+</body>
+</html>
