@@ -78,7 +78,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+        @*        <li class="nav-item active">
                     <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
                 </li>
                 <li class="nav-item">
@@ -89,9 +89,12 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a>
-                </li>
+                </li>*@
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("Login", "User")">Logout</a>
+                    <a class="btn btn-danger" href="@Url.Action("Login", "User")" style="border-radius:10px;">
+                        <img src="~/images/logout.png" alt="Icon" width="20" height="20" class="mr-2" >
+                        Log Out
+                    </a>
                 </li>
             </ul>
         </div>
@@ -116,31 +119,37 @@
                             Aircraft Catalog
                         </a>
                     </li>
-         @*           <li class="nav-item" style="margin-left:-55px">
-                        <a href="@Url.Action("_DisplayAircraftTable", "Aircraft")" id="btnAircraft" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/Catelog.png" alt="Icon" width="25" height="25" class="mr-2">
-                            Aircraft List
+                    <li class="nav-item">
+                        <a href="@Url.Action("ManufacturingProgress", "ManufacturingProgress")" id="btnAircraft" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/order.png" alt="Icon" width="25" height="25" class="mr-2" style="margin-left:-71px">
+                            Order List
                         </a>
-                    </li>*@
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Order", "Order")" id="btnPrivacy" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/MyOrder.png" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-91px">
+                            Orders
+                        </a>
+                    </li>
                     <li class="nav-item" >
-                        <a href="@Url.Action("Privacy", "Home")" id="btnPrivacy" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
-                            Privacy
+                        <a href="@Url.Action("Delivery", "Delivery")" id="btnPrivacy" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/airportLocation.png" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-84px">
+                            Delivery
                         </a>
                     </li>
                     <!-- Add other navigation buttons as needed -->
                     <li class="nav-item" >
-                        <a href="@Url.Action("Contact", "Home")" id="btnContact" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
-                            Contact
+                        <a href="@Url.Action("Contact", "Contact")" id="btnContact" class="btn btn-outline-primary btn-block">
+                            <img src="~/images/contactUs.png" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-67px">
+                            Contact Us
                         </a>
                     </li>
-                    <li class="nav-item" >
+             @*       <li class="nav-item" >
                         <a href="@Url.Action("Login", "User")" id="btnLogout" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
+                            <img src="~/images/logout.png" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-93px">
                             Logout
                         </a>
-                    </li>
+                    </li>*@
                 </ul>
             </div>
 

@@ -7,7 +7,8 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using RaythosAerospaceMVC.Models;
 using RaythosAerospaceMVC.Repository;
-
+using System.Net.Mail;
+using RaythosAerospaceMVC.Repositories;
 
 namespace RaythosAerospaceMVC
 {
@@ -39,6 +40,17 @@ namespace RaythosAerospaceMVC
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAircraftRepository, AircraftRepository>();
+            services.AddScoped<IOtpRepository, OtpRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IManufacturingProgressRepository, ManufacturingProgressRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
+
+            services.AddScoped<SmtpClient>();
+
+
+
 
             // Other service configurations
         }

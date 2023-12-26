@@ -10,12 +10,15 @@ namespace RaythosAerospaceMVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAircraftRepository _aircraftRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
 
-        public CustomAircraftController(IAircraftRepository aircraftRepository, ILogger<HomeController> logger)
+
+        public CustomAircraftController(IAircraftRepository aircraftRepository, ILogger<HomeController> logger, IPaymentRepository paymentRepository)
         {
             _aircraftRepository = aircraftRepository;
             _logger = logger;
+            _paymentRepository = paymentRepository;
         }
 
         // GET: Aircrafts/CustomAircraft/5
@@ -44,13 +47,19 @@ namespace RaythosAerospaceMVC.Controllers
 
         // POST: Handle form submission
         //[HttpPost]
-        public async Task<IActionResult> Payment(Aircraft model)
+        public async Task<IActionResult> Payment(Aircraft model, IFormFile? uploadedImage)
         {
             // Process the form data here (model contains the submitted values)
             // For example:
             // Save the Aircraft details to the database or perform any other operations
 
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
+            if(uploadedImage != null)
+            {
+                string imagePath = await _aircraftRepository.UploadImage(uploadedImage);
+
+                // Set the ImageUrl property of the aircraft
+                model.ImageUrl = imagePath;
+            }
 
 
             // Redirect to a success page or return a success message
@@ -65,6 +74,40 @@ namespace RaythosAerospaceMVC.Controllers
         public IActionResult PaymentSuccess()
         {
             return View();
+        }
+
+        public async Task<IActionResult> AddPayment(Payment payment, IFormFile uploadedImage)
+        {
+            try
+            {
+                if (payment == null)
+                {
+                    _logger.LogWarning("Invalid request data.");
+                    return BadRequest();
+                }
+
+                int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
+
+                payment.UserId = userId;
+
+                var createPayment = await _paymentRepository.CreatePayment(payment);
+                _logger.LogInformation($"Added new payment with ID {createPayment.Id}.");
+
+                if (createPayment == null)
+                {
+                    return NotFound();
+                }
+
+                var aircrafts = await _aircraftRepository.GetAllAircraftsAsync();
+
+                //return CreatedAtAction(nameof(GetPaymentById), new { id = createPayment.Id }, createPayment);
+                return View("~/Views/Home/Index.cshtml", aircrafts);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding a payment.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
     }

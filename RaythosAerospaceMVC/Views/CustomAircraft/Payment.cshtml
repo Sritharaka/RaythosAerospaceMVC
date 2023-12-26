@@ -22,11 +22,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://js.stripe.com/v3/"></script>
 
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 </head>
 <body>
-    <div class="container mt-4" id="containerToUpdate">
-        <h3>Card Payment</h3>
-        <form asp-action="PaymentComplete" method="post" enctype="multipart/form-data" id="subMitIdCompleted">
+    <div class="container mt-4" id="containerToUpdate" style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+        <h3 style="margin-bottom: 20px; margin-bottom:20px;">Payment</h3>
+        <form asp-action="AddPayment" method="post" enctype="multipart/form-data" id="subMitIdCompleted">
 
             <div class="row">
                 <div class="col-lg-6">
@@ -35,7 +42,7 @@
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-tag"></i></span>
                             <input asp-for="ModelName" id="ModelName" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ModelName ?? "")" readonly />
-                            <input asp-for="Id" id="Id" name="Id" class="form-control @(ViewData.ModelState.ContainsKey("Id") && ViewData.ModelState["Id"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Id.ToString() ?? "")" readonly />
+                            <input asp-for="Id" id="Id" name="Id" class="form-control @(ViewData.ModelState.ContainsKey("Id") && ViewData.ModelState["Id"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Id.ToString() ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="ModelName" class="text-danger"></span>
                     </div>
@@ -52,23 +59,128 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label asp-for="BasePrice">Total Price (USD)</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                    <input asp-for="BasePrice" id="BasePrice" name="BasePrice" class="form-control @(ViewData.ModelState.ContainsKey("BasePrice") && ViewData.ModelState["BasePrice"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.BasePrice.ToString() ?? "")" readonly style="color: maroon;" />
+                </div>
+                <span asp-validation-for="BasePrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                <label for="cardNumber">Card Number</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
+                    <input type="text" id="cardNumber" name="cardNumber" class="form-control" placeholder="Enter card number" required>
+                </div>
+                <div id="cardNumberError" class="text-danger"></div>
+
+            </div>
+      
+                <div class="form-group col-md-6">
+                    <label for="expiryDate">Expiration Date</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-calendar-check"></i></span>
+                        <input type="text" id="expiryDate" name="expiryDate" class="form-control" placeholder="MM/YY" required>
+                    </div>
+                    <div id="expiryDateError" class="text-danger"></div>
+
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="cvv">CVV</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                        <input type="text" id="cvv" name="cvv" class="form-control" placeholder="CVV" required>
+                    </div>
+                    <div id="cvvError" class="text-danger"></div>
+
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="emailAddress">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
+                        <input type="text" id="emailAddress" name="emailAddress" class="form-control" placeholder="Enter Email" required>
+                    </div>
+                    <div id="emailError" class="text-danger"></div>
+                </div>
+               
+            </div>
+  
+
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                <label for="cardHolderName">Cardholder Name</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person-fill-check"></i></span>
+                     <input type="text" class="form-control" id="cardHolderName" name="cardHolderName" placeholder="Enter cardholder's name" required>
+                </div>
+                <div id="cardHolderNameError" class="text-danger"></div>
+
+            </div>
+
+
+                <div class="form-group col-md-6">
+                    <label for="cvv">Telephone Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone-forward"></i></span>
+                        <input type="text" id="telephone" name="telephone" class="form-control" placeholder="Enter Telephone Number" required>
+                    </div>
+                    <div id="telephoneError" class="text-danger"></div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group" style="margin-top:40px">
+                <div id="submitShow">
+                    <button type="submit" id="submitButton" class="btn btn-primary"> <i class="bi  bi-credit-card"></i> Payment</button>
+                </div>
+
+                <button type="button" id="generateOtp" class="btn btn-success" style="margin-bottom:30px;">
+                    <i class="bi bi-envelope-arrow-down-fill"></i> Generate Otp
+            </button>
+
+                <div id="otpValidation" style="display: none;">
+                    <div class="form-group col-md-6">
+                        <label for="otpInput" style="margin-left:-13px;">Enter OTP</label>
+                        <div class="input-group" style="margin-bottom:30px; margin-left:-13px;">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                            <input type="text" class="form-control" id="otpInput" placeholder="Enter OTP" required >
+                        </div>
+
+                    </div>
+
+                    <button type="button" id="validateOtp" class="btn btn-danger">
+                        <i class="bi bi-key-fill"></i> Validate OTP
+                    </button>
+                </div>
+
+            </div>
+
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="InteriorDesign">Interior Design</label>
+                        @*<label asp-for="InteriorDesign">Interior Design</label>*@
                         <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-palette"></i></span>
-                            <input asp-for="InteriorDesign" id="InteriorDesign" name="InteriorDesign" class="form-control @(ViewData.ModelState.ContainsKey("InteriorDesign") && ViewData.ModelState["InteriorDesign"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InteriorDesign ?? "")" />
+@*                            <span class="input-group-text"><i class="bi bi-palette"></i></span>
+*@                            <input asp-for="InteriorDesign" id="InteriorDesign" name="InteriorDesign" class="form-control @(ViewData.ModelState.ContainsKey("InteriorDesign") && ViewData.ModelState["InteriorDesign"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InteriorDesign ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="InteriorDesign" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="SeatingType">Seating Type</label>
+                        @*<label asp-for="SeatingType">Seating Type</label>*@
                         <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-list-stars"></i></span>
-                            <input asp-for="SeatingType" id="SeatingType" name="SeatingType" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingType ?? "")" />
+@*                            <span class="input-group-text"><i class="bi bi-list-stars"></i></span>
+*@                            <input asp-for="SeatingType" id="SeatingType" name="SeatingType" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingType ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="SeatingType" class="text-danger"></span>
                     </div>
@@ -78,20 +190,20 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="EngineType">Engine Type</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-gear"></i></span>
-                            <input asp-for="EngineType" id="EngineType" name="EngineType" class="form-control @(ViewData.ModelState.ContainsKey("EngineType") && ViewData.ModelState["EngineType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.EngineType ?? "")" disabled />
+@*                        <label asp-for="EngineType">Engine Type</label>
+*@                        <div class="input-group">
+@*                            <span class="input-group-text"><i class="bi bi-gear"></i></span>
+*@                            <input asp-for="EngineType" id="EngineType" name="EngineType" class="form-control @(ViewData.ModelState.ContainsKey("EngineType") && ViewData.ModelState["EngineType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.EngineType ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="EngineType" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="MaximumSpeed">Maximum Speed (km/h)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-speedometer2"></i></span>
-                            <input asp-for="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.MaximumSpeed.ToString() ?? "")" disabled />
+@*                        <label asp-for="MaximumSpeed">Maximum Speed (km/h)</label>
+*@                        <div class="input-group">
+@*                            <span class="input-group-text"><i class="bi bi-speedometer2"></i></span>
+*@                            <input asp-for="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.MaximumSpeed.ToString() ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="MaximumSpeed" class="text-danger"></span>
                     </div>
@@ -102,20 +214,20 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="SeatingCapacity">Seating Capacity</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input asp-for="SeatingCapacity" id="SeatingCapacity" name="SeatingCapacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingCapacity.ToString() ?? "")" />
+@*                        <label asp-for="SeatingCapacity">Seating Capacity</label>
+*@                        <div class="input-group">
+@*                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+*@                            <input asp-for="SeatingCapacity" id="SeatingCapacity" name="SeatingCapacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingCapacity.ToString() ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="FuelCapacity">Fuel Capacity (L)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-droplet-half"></i></span>
-                            <input asp-for="FuelCapacity" id="FuelCapacity" name="FuelCapacity" class="form-control @(ViewData.ModelState.ContainsKey("FuelCapacity") && ViewData.ModelState["FuelCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.FuelCapacity.ToString() ?? "")" />
+@*                        <label asp-for="FuelCapacity">Fuel Capacity (L)</label>
+*@                        <div class="input-group">
+@*                            <span class="input-group-text"><i class="bi bi-droplet-half"></i></span>
+*@                            <input asp-for="FuelCapacity" id="FuelCapacity" name="FuelCapacity" class="form-control @(ViewData.ModelState.ContainsKey("FuelCapacity") && ViewData.ModelState["FuelCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.FuelCapacity.ToString() ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="FuelCapacity" class="text-danger"></span>
                     </div>
@@ -125,17 +237,17 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="uploadedImage">Aircraft Image</label>
-                        <input asp-for="uploadedImage" id="uploadedImage" name="uploadedImage" type="file" class="form-control-file @(ViewData.ModelState.ContainsKey("uploadedImage") && ViewData.ModelState["uploadedImage"].Errors.Count > 0 ? "is-invalid" : "")" />
-                        <span asp-validation-for="uploadedImage" class="text-danger"></span>
+@*                        <label asp-for="uploadedImage">Aircraft Image</label>
+                        *@             <input asp-for="ImageUrl" id="ImageUrl" name="ImageUrl" type="text" class="form-control-file @(ViewData.ModelState.ContainsKey("ImageUrl") && ViewData.ModelState["ImageUrl"].Errors.Count > 0 ? "is-invalid" : "")" style="display:none" value="@(Model?.ImageUrl ?? "")" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="Weight">Weight (kg)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-bag-check"></i></span>
-                            <input asp-for="Weight" name="Weight" class="form-control @(ViewData.ModelState.ContainsKey("Weight") && ViewData.ModelState["Weight"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Weight.ToString() ?? "")" disabled />
+@*                        <label asp-for="Weight">Weight (kg)</label>
+*@                        <div class="input-group">
+@*                            <span class="input-group-text"><i class="bi bi-bag-check"></i></span>
+*@                            <input asp-for="Weight" name="Weight" class="form-control @(ViewData.ModelState.ContainsKey("Weight") && ViewData.ModelState["Weight"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Weight.ToString() ?? "")" style="display:none" />
                         </div>
                         <span asp-validation-for="Weight" class="text-danger"></span>
                     </div>
@@ -144,10 +256,10 @@
 
             <!-- Include input fields for the remaining properties -->
             <div class="form-group">
-                <label asp-for="AdditionalFeatures">Additional Features</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                    <textarea asp-for="AdditionalFeatures" class="form-control @(ViewData.ModelState.ContainsKey("AdditionalFeatures") && ViewData.ModelState["AdditionalFeatures"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
+@*                <label asp-for="AdditionalFeatures">Additional Features</label>
+*@                <div class="input-group">
+@*                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+*@                    <textarea asp-for="AdditionalFeatures" class="form-control @(ViewData.ModelState.ContainsKey("AdditionalFeatures") && ViewData.ModelState["AdditionalFeatures"].Errors.Count > 0 ? "border border-danger" : "")" required style="display:none"></textarea>
                 </div>
                 <span asp-validation-for="AdditionalFeatures" class="text-danger"></span>
             </div>
@@ -155,37 +267,10 @@
 
 
             <!-- Submit Button -->
-            <div class="form-group">
-                <label asp-for="BasePrice">Total Price (USD)</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-                    <input asp-for="BasePrice" id="BasePrice" name="BasePrice" class="form-control @(ViewData.ModelState.ContainsKey("BasePrice") && ViewData.ModelState["BasePrice"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.BasePrice.ToString() ?? "")" disabled style="color: maroon;" />
-                </div>
-                <span asp-validation-for="BasePrice" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="cardNumber">Card Number</label>
-                <input type="text" id="cardNumber" name="cardNumber" class="form-control"  placeholder="Enter card number" required>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="expiryDate">Expiration Date</label>
-                    <input type="text" id="expiryDate" name="expiryDate" class="form-control"  placeholder="MM/YY" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" name="cvv" class="form-control"  placeholder="CVV" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="cardHolderName">Cardholder Name</label>
-                <input type="text" class="form-control" id="cardHolderName" placeholder="Enter cardholder's name" required>
-            </div>
+           
 
         
 
-            <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
     </div>
 
@@ -199,6 +284,179 @@
             event.preventDefault();
             // Handle payment processing here
         });
+
+        $('#submitButton').hide(); // Initially hide the payment button
+        var intialOtp = null;
+
+        document.getElementById('generateOtp').addEventListener('click', function () {
+            var cardNumber = document.getElementById('cardNumber').value;
+            var expiryDate = document.getElementById('expiryDate').value;
+            var cvv = document.getElementById('cvv').value;
+            var cardHolderName = document.getElementById('cardHolderName').value;
+            var telephone = document.getElementById('telephone').value;
+            var emailAddress = document.getElementById('emailAddress').value;
+
+
+      
+
+            // Validate credit card number format
+            if (!isValidCreditCardNumber(cardNumber)) {
+                document.getElementById('cardNumberError').innerText = 'Invalid credit card number';
+                return; // Stop further execution if card number is invalid
+            } else {
+                document.getElementById('cardNumberError').innerText = ''; // Clear error message
+            }
+
+            // Validate expiry date format (MM/YY)
+            if (!isValidExpiryDate(expiryDate)) {
+                document.getElementById('expiryDateError').innerText = 'Invalid expiry date (MM/YY)';
+                return; // Stop further execution if expiry date is invalid
+            } else {
+                document.getElementById('expiryDateError').innerText = ''; // Clear error message
+            }
+
+            // Validate CVV format (3 or 4 digits)
+            if (!isValidCVV(cvv)) {
+                document.getElementById('cvvError').innerText = 'Invalid CVV (3 digits)';
+                return; // Stop further execution if CVV is invalid
+            } else {
+                document.getElementById('cvvError').innerText = ''; // Clear error message
+            }
+
+            if (emailAddress.trim() === '' || !isValidEmail(emailAddress)) {
+                document.getElementById('emailError').innerText = 'Email is required';
+                return; // Stop further execution if CVV is invalid
+            } else {
+                document.getElementById('emailError').innerText = ''; // Clear error message
+            }
+
+            // Validate cardholder name (not empty)
+            if (cardHolderName.trim() === '') {
+                document.getElementById('cardHolderNameError').innerText = 'CardHolderName is required';
+                return; // Stop further execution if CVV is invalid
+            } else {
+                document.getElementById('cardHolderNameError').innerText = ''; // Clear error message
+            }
+
+            if (telephone.trim() === '' || !isValidTelephone(telephone)) {
+                document.getElementById('telephoneError').innerText = 'Telephone is required (11 digits)';
+                return; // Stop further execution if CVV is invalid
+            } else {
+                document.getElementById('telephoneError').innerText = ''; // Clear error message
+            }
+
+
+            // Perform further validations or generate OTP here...
+            // Generate OTP logic here
+            var otp = generateOTP();
+            intialOtp = otp
+            // Pass the OTP to a payment controller method using AJAX
+            $.ajax({
+                url: '/Payment/SendOtp', // Replace with your endpoint for handling OTP
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    // Adjust the selector based on your specific anti-forgery token input
+                },
+                data: { otp: otp, telephone: telephone }, // Send the OTP as part of the request data
+                success: function (response) {
+                    // Handle success response
+                    console.log('OTP sent to payment controller successfully.');
+                    toastr.success('Payment OTP sent to successfully.', 'Success', {
+                        closeButton: true,
+                        progressBar: true,
+                        timeOut: 3000 // Adjust the duration the toast will be displayed (in milliseconds) as needed
+                    });
+                    //alert('OTP sent to payment controller successfully.'); // For demonstration purposes
+                    $('#otpValidation').show(); // Show OTP input and Validate OTP button
+                    $('#submitButton').hide(); // Hide the submit button
+
+
+
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Failed to Payment OTP sent.', 'Error', {
+                        closeButton: true,
+                        progressBar: true,
+                        timeOut: 3000 // Adjust the duration the toast will be displayed (in milliseconds) as needed
+                    });
+                    console.error('Error sending OTP:', error);
+                    // Handle error response
+                }
+            });
+
+            // Update a placeholder element or display the generated OTP as needed
+            alert('Generated OTP: ' + otp); // For demonstration, displaying in an alert
+        });
+
+        function isValidCreditCardNumber(cardNumber) {
+            // Add your credit card number validation logic here
+            // For example, you can use regex or other validation techniques
+            // Return true if the card number is valid, false otherwise
+            return /^[0-9]{16}$/.test(cardNumber); // Checks for exactly 16 digits
+        }
+
+        function isValidExpiryDate(expiryDate) {
+            // Validate expiry date format (MM/YY)
+            return /^((0[1-9])|(1[0-2]))\/(\d{2})$/.test(expiryDate); // Example regex pattern for MM/YY format
+        }
+
+        function isValidCVV(cvv) {
+            // Validate CVV format (3 or 4 digits)
+            return /^[0-9]{3}$/.test(cvv); // Example regex pattern for 3 or 4 digits
+        }
+        function isValidTelephone(telephone) {
+            // Add your credit card number validation logic here
+            // For example, you can use regex or other validation techniques
+            // Return true if the card number is valid, false otherwise
+            return /^[0-9]{11}$/.test(telephone); // Checks for exactly 16 digits
+        }
+
+
+        function isValidEmail(text) {
+            const gmailRegex = /gmail\.com/;
+            return gmailRegex.test(text);
+        }
+
+
+
+        function generateOTP() {
+            var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // English letters
+            var randomLetter = letters.charAt(Math.floor(Math.random() * letters.length)); // Get a random letter
+            var randomDigits = Math.floor(1000 + Math.random() * 9000); // Generate a random 4-digit number
+
+            var otp = randomLetter + randomDigits; // Concatenate letter and digits for OTP
+            return otp;
+        }
+
+
+        $('#validateOtp').on('click', function () {
+            var enteredOTP = $('#otpInput').val(); // Get the entered OTP
+            // Perform your OTP validation logic here...
+            if (intialOtp != null && intialOtp === enteredOTP){
+                toastr.success('Entered OTP: ' + enteredOTP + ' is validated.', 'Success', {
+                    closeButton: true,
+                    progressBar: true,
+                    timeOut: 3000 // Adjust the duration the toast will be displayed (in milliseconds) as needed
+                });
+                $('#otpValidation').hide();
+                $('#generateOtp').hide();
+                $('#submitButton').show();
+                
+                
+            }
+            else{
+                toastr.error('Entered OTP is not validated', 'Error', {
+                    closeButton: true,
+                    progressBar: true,
+                    timeOut: 3000 // Adjust the duration the toast will be displayed (in milliseconds) as needed
+                });
+
+            }
+            // For demonstration purposes, showing an alert on successful validation
+        });
+
+
     </script>
 </body>
 </html>
