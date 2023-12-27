@@ -90,9 +90,20 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a>
                 </li>*@
+                <div id="userDetailsContainer">
+                    <!-- User details will be populated here -->
+                </div>
+
                 <li class="nav-item">
+                    <a class="btn btn-primary" href="@Url.Action("UserUpdate", "User")" style="border-radius:10px;">
+                        <img src="~/images/user.png" alt="Icon" width="30" height="30" class="mr-2">
+                       Profile
+                    </a>
+                </li>
+           
+                <li class="nav-item" style="margin-left: 20px;">
                     <a class="btn btn-danger" href="@Url.Action("Login", "User")" style="border-radius:10px;">
-                        <img src="~/images/logout.png" alt="Icon" width="20" height="20" class="mr-2" >
+                        <img src="~/images/logout1.png" alt="Icon" width="25" height="25" class="mr-2" >
                         Log Out
                     </a>
                 </li>
@@ -171,6 +182,27 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Include jQuery -->
+
+    <script>
+        $(document).ready(function () {
+            // Call UserDetails method using AJAX
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("UserDetails", "User")", // Replace ControllerName with your actual controller
+                success: function (data) {
+                    // Assuming data contains user details HTML
+                    // Bind the received data to the userDetailsContainer div
+                    $('#userDetailsContainer').html(data);
+                },
+                error: function (error) {
+                    // Handle any error that occurs during the AJAX call
+                    console.log("Error fetching user details:", error);
+                }
+            });
+        });
+    </script>
 
 
 @*

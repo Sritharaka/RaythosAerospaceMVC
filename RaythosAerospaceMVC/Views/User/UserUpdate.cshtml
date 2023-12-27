@@ -1,0 +1,602 @@
+﻿@model User
+
+
+@{
+    ViewData["Title"] = "Aircraft Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UserUpdate Page</title>
+    <!-- Bootstrap CSS (from CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="..." crossorigin="anonymous">
+
+    <!-- Bootstrap Icons (from CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQ6gY2DAOJZyHRDIm0M2KDiBlNmzmGmY0"></script>
+    <style>
+        /* Set the size of the map container */
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 80px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+
+        <h3 style="margin-bottom: 20px;">User Update</h3>
+
+        <form asp-action="UserUpdate" method="post" enctype="multipart/form-data" id="subMitId">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName">First Name</label>
+                        <input asp-for="FirstName" placeholder="Enter First Name" id="FirstName" name="FirstName" class="form-control @(ViewData.ModelState.ContainsKey("FirstName") && ViewData.ModelState["FirstName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.FirstName ?? "")" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="LastName">Last Name</label>
+                        <input asp-for="LastName" placeholder="Enter Last Name" id="LastName" name="LastName" class="form-control @(ViewData.ModelState.ContainsKey("LastName") && ViewData.ModelState["LastName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.LastName ?? "")" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Email">Email</label>
+                        <input asp-for="Email" id="Email" name="Email" type="text" placeholder="Enter Email" class="form-control @(ViewData.ModelState.ContainsKey("Email") && ViewData.ModelState["Email"].Errors.Count > 0 ? "border border-danger" : "")" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <span id="EmailError" style="display: none; color: red;">Please enter a valid email address</span>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber">Phone Number</label>
+                        <input asp-for="PhoneNumber" id="PhoneNumber" name="PhoneNumber" placeholder="Enter Phone Number" class="form-control @(ViewData.ModelState.ContainsKey("PhoneNumber") && ViewData.ModelState["PhoneNumber"].Errors.Count > 0 ? "border border-danger" : "")" required />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Password">Password</label>
+                        <input asp-for="Password" id="Password" name="Password" placeholder="Enter Password" class="form-control @(ViewData.ModelState.ContainsKey("Password") && ViewData.ModelState["Password"].Errors.Count > 0 ? "border border-danger" : "")" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword">Confirm Password</label>
+                        <input asp-for="ConfirmPassword" id="ConfirmPassword" name="ConfirmPassword" placeholder="Enter Confirm Password" class="form-control @(ViewData.ModelState.ContainsKey("PhoneNumber") && ViewData.ModelState["PhoneNumber"].Errors.Count > 0 ? "border border-danger" : "")" required />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+                    </div>
+                    <span id="passwordError" style="display: none; color: red;">Passwords do not match.</span>
+
+                </div>
+
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address">Address</label>
+                <textarea asp-for="Address" placeholder="Enter Address" class="form-control @(ViewData.ModelState.ContainsKey("Address") && ViewData.ModelState["Address"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="uploadedImage">User Image</label>
+                <input asp-for="uploadedImage" id="uploadedImage" name="uploadedImage" type="file" class="form-control-file @(ViewData.ModelState.ContainsKey("uploadedImage") && ViewData.ModelState["uploadedImage"].Errors.Count > 0 ? "is-invalid border border-danger" : "")" required />
+                <span asp-validation-for="uploadedImage" class="text-danger"></span>
+            </div>
+
+
+
+
+            <!-- Include other input fields for the remaining properties -->
+
+            <div class="form-group" style="margin-top:40px">
+                @*<input type="submit" value="Add Aircraft" class="btn btn-primary" />*@
+
+                <!-- Button with Bootstrap Icon -->
+                <button type="submit" id="submitAircraft" class="btn btn-success">
+                    <i class="bi bi-pencil me-2"></i> User Update
+                </button>
+                @*
+                <button type="button" id="updateAircraft" class="btn btn-danger">
+                <i class="bi bi-pencil me-2"></i> Update Aircraft
+                </button>
+
+                <!-- Button to load the aircraft list (without triggering form submission) -->
+                <button type="button" id="loadAircraftList" class="btn btn-success" style="margin-left:30px">
+                <i class="bi bi-list"></i> Aircraft List
+                </button>*@
+
+            </div>
+        </form>
+
+@*        <div id="map"></div>
+*@
+
+
+    </div>
+
+
+
+    <!-- Include the partial view -->
+    @*    <div id="displayAircraftTable">
+    <!-- Aircraft list will be displayed here -->
+    @await Html.PartialAsync("_DisplayAircraftTable", Model) <!-- Assuming Model contains IPagedList<Aircraft> -->
+
+    </div>*@
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        //$(document).ready(function () {
+        //    $('#loadAircraftList').click(function () {
+        //        // Make an AJAX request to load the aircraft list
+        //        $.ajax({
+        //            url: '/Aircraft/_DisplayAircraftTable',
+        //            type: 'GET',
+        //            success: function (data) {
+        //                $('#displayAircraftTable').html(data); // Update the aircraft table
+        //            },
+        //            error: function () {
+        //                console.error('Error loading aircraft list');
+        //            }
+        //        });
+        //    });
+        //});
+
+        $('#updateAircraft').hide();
+
+        // Function to validate all fields and return if they are valid
+        function validateFields() {
+            var isValid = true;
+
+            // Array of field IDs to validate
+            var fieldIds = [
+                'FirstName', 'LastName', 'Email', 'Address', 'PhoneNumber', 'Password', 'ConfirmPassword', 'uploadedImage',
+                // Add other field IDs to be validated
+            ];
+
+            // Loop through each field ID to perform validation
+            fieldIds.forEach(function (fieldId) {
+                var fieldValue = $('#' + fieldId).val().trim();
+
+                if (fieldValue === '') {
+                    $('#' + fieldId).addClass('border border-danger'); // Apply red border for empty fields
+                    isValid = false;
+                } else {
+                    $('#' + fieldId).removeClass('border border-danger'); // Remove red border for valid fields
+                }
+            });
+
+            if ($('#Email').val() === '') {
+                isValid = false;
+                $('#Email').addClass('border-danger'); // Apply error styling
+                $('#EmailError').show();
+            } else {
+                $('#Email').removeClass('border-danger');
+                $('#EmailError').hide();
+                // Remove error styling if field is valid
+            }
+
+            return isValid;
+        }
+
+        // Function to validate fields and add red border if empty on field blur
+        function validateFieldsRealTime(fieldId) {
+            $('#' + fieldId).on('blur', function () {
+                var fieldValue = $(this).val().trim();
+
+                if (fieldValue === '') {
+                    $(this).addClass('border border-danger'); // Apply red border for empty fields on blur
+                } else {
+                    $(this).removeClass('border border-danger'); // Remove red border for valid fields on blur
+                }
+            });
+
+        }
+
+        // Attach blur event listeners to the fields for real-time validation
+        $(document).ready(function () {
+            // Array of field IDs to validate on blur
+            var fieldIds = [
+                'FirstName', 'LastName', 'Email', 'Address', 'PhoneNumber', 'Password', 'ConfirmPassword', 'uploadedImage',
+                // Add other field IDs to be validated on blur
+            ];
+
+            // Loop through each field ID to attach blur event listeners
+            fieldIds.forEach(function (fieldId) {
+                validateFieldsRealTime(fieldId); // Attach blur event listener to each field
+            });
+
+            function validateEmailField() {
+                var isValid = true;
+
+                // Validate ModelName field
+                if ($('#Email').val() === '') {
+                    isValid = false;
+                    $('#Email').addClass('border-danger'); // Apply error styling
+                    $('#EmailError').show();
+                } else {
+                    $('#Email').removeClass('border-danger');
+                    $('#EmailError').hide();
+                    // Remove error styling if field is valid
+                }
+                return isValid;
+            }
+
+            // Event listener for clicking the submitAircraft button
+            $('#submitAircraft').click(function (event) {
+                // Prevent the default form submission behavior initially
+                event.preventDefault();
+
+                // Validate fields before submitting the form
+                if (validateFields()) {
+                    // If fields are valid, allow the form submission
+                  $('#subMitId').submit(); // Submit the form with valid data
+                } else {
+                    // Fields are not valid, display an error message or perform necessary action
+                    alert('Please fill all required fields with valid data.');
+                }
+            });
+
+            // ... (Other parts of your existing JavaScript code)
+        });
+
+
+        //// Function to handle update action
+        //function updateAircraft(aircraftId) {
+        //    // AJAX request to call the Aircraft.cshtml file with the Id parameter
+        //    $.ajax({
+        //        url: '/Aircraft/Details', // Replace with the appropriate URL for your Aircraft.cshtml file
+        //        type: 'GET',
+        //        data: { id: aircraftId }, // Pass the Id as a parameter
+        //        success: function (response) {
+        //            // Handle the response as needed (e.g., display the Aircraft.cshtml content)
+        //            // For example, you can load the response content into a div
+        //            $('#displayAircraftDetails').html(response);
+        //        },
+        //        error: function () {
+        //            console.error('Error loading aircraft details');
+        //        }
+        //    });
+        //}
+        var aircraftId = null;
+        //// Click event for the Update button
+        $(document).on('click', '.editBtn', function () {
+            aircraftId = $(this).data('id');
+            //updateAircraft(aircraftId); // Call the function passing the aircraftId
+
+        });
+
+        $(document).ready(function () {
+            // Event listener for clicking the updateAircraft button
+            $('#updateAircraft').click(function () {
+                // Validate fields before updating
+                if (validateFields()) {
+                    // If fields are valid, construct the data object
+                    var aircraftData = {
+                        ModelName: $('#ModelName').val(),
+                        Manufacturer: $('#Manufacturer').val(),
+                        Description: $('#Description').val(),
+                        SeatingType: $('#SeatingType').val(),
+                        InteriorDesign: $('#InteriorDesign').val(),
+                        uploadedImage: $('#uploadedImage').val(),
+                        BasePrice: $('#BasePrice').val(),
+                        EngineType: $('#EngineType').val(),
+                        MaximumSpeed: $('#MaximumSpeed').val(),
+                        SeatingCapacity: $('#SeatingCapacity').val(),
+                        FuelCapacity: $('#FuelCapacity').val(),
+                        Weight: $('#Weight').val(),
+                        ImageUrl: $('#ImageUrl').val(),
+                        //ImageUrl: $('#ImageUrl').val(),
+                        //CreatedDate: $('#CreatedDate').val(),
+                        Id: aircraftId
+
+
+
+                        // Get other field values in a similar way
+                    };
+
+
+                    //var aircraftId = $('#Id').val();
+                    console.log(aircraftId)
+                    // Perform update action with the constructed aircraftData object
+                    // You can make an AJAX request or call a function to update the data here
+                    updateAircraftData(aircraftData, aircraftId);
+                } else {
+                    // Fields are not valid, display an error message or perform necessary action
+                    alert('Please fill all required fields with valid data.');
+                }
+            });
+
+
+
+            // Function to validate fields
+            //function validateFields() {
+            //    var isValid = true;
+
+            //    // Validate ModelName field
+            //    if ($('#ModelName').val() === '') {
+            //        isValid = false;
+            //        $('#ModelName').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#ModelName').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#Manufacturer').val() === '') {
+            //        isValid = false;
+            //        $('#Manufacturer').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#Manufacturer').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#Description').val() === '') {
+            //        isValid = false;
+            //        $('#Description').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#Description').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#SeatingType').val() === '') {
+            //        isValid = false;
+            //        $('#SeatingType').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#SeatingType').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+            //    // Validate ModelName field
+            //    if ($('#InteriorDesign').val() === '') {
+            //        isValid = false;
+            //        $('#InteriorDesign').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#InteriorDesign').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#ImageUrl').val() === '') {
+            //        isValid = false;
+            //        $('#ImageUrl').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#ImageUrl').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#BasePrice').val() === '') {
+            //        isValid = false;
+            //        $('#BasePrice').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#BasePrice').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#EngineType').val() === '') {
+            //        isValid = false;
+            //        $('#EngineType').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#EngineType').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#MaximumSpeed').val() === '') {
+            //        isValid = false;
+            //        $('#MaximumSpeed').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#MaximumSpeed').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#SeatingCapacity').val() === '') {
+            //        isValid = false;
+            //        $('#SeatingCapacity').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#SeatingCapacity').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#FuelCapacity').val() === '') {
+            //        isValid = false;
+            //        $('#FuelCapacity').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#FuelCapacity').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+
+            //    // Validate ModelName field
+            //    if ($('#Weight').val() === '') {
+            //        isValid = false;
+            //        $('#Weight').addClass('border-danger'); // Apply error styling
+            //    } else {
+            //        $('#Weight').removeClass('border-danger'); // Remove error styling if field is valid
+            //    }
+            //    // Validate other fields in a similar way
+
+            //    return isValid;
+            //}
+
+
+
+            // Function to update the aircraft data
+            function updateAircraftData(data, aircraftId) {
+                // Perform the update action here using the 'data' object
+                // For example, make an AJAX request to update the data on the server
+                var Url = '/Aircraft/Edit/' + aircraftId;
+
+                var formData = new FormData();
+
+                // Append non-file fields to FormData
+                for (var key in data) {
+                    formData.append(key, data[key]);
+                }
+
+                // Append file (IFormFile) to FormData
+                var fileInput = document.getElementById('uploadedImage'); // Replace 'uploadedImage' with your file input's ID
+                var file = fileInput.files[0]; // Get the first file from the input
+
+                formData.append('uploadedImage', file);
+
+                $.ajax({
+                    url: Url, // Replace with your endpoint for updating aircraft
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                        // Adjust the selector based on your specific anti-forgery token input
+                    },
+                    data: formData,
+                    processData: false, // Don't process the FormData
+                    contentType: false, // Set content type to false for file uploads
+                    success: function (response) {
+                        // Handle success response after updating data
+                        console.log('Aircraft data updated successfully.');
+                        $('#submitAircraft').show();
+                        $('#updateAircraft').hide();
+
+                        toastr.success('Aircraft data updated successfully.', 'Success', {
+                            closeButton: true,
+                            progressBar: true,
+                            timeOut: 50000 // Time duration the toast will be displayed (in milliseconds)
+                        });
+
+                        // Delay the reload slightly to allow users to see the toast
+                        setTimeout(function () {
+                            location.reload(); // Reload the page after 2 seconds
+                        }, 3000); // Adjust the delay time as needed
+
+
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating aircraft data:', error);
+                        // Handle error response
+                    }
+                });
+            }
+
+            // ... Other code and event listeners
+        });
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+    <script>
+        // Initialize and display the map
+        function initMap() {
+            // Set initial coordinates
+            const initialCoordinates = { lat: 6.9271, lng: 79.8612 };
+
+            // Create a new map object centered at the initial coordinates
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10, // Set the initial zoom level
+                center: initialCoordinates, // Set the initial center of the map
+            });
+
+            // Create a marker at the initial coordinates
+            const marker = new google.maps.Marker({
+                position: initialCoordinates,
+                map: map,
+                title: "Colombo", // Title displayed on marker hover
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#ConfirmPassword').on('keyup', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $(this).val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').show();
+                } else {
+                    $('#passwordError').hide();
+                }
+            });
+
+            $('form').on('submitAircraft', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $('#ConfirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').show();
+                    return false; // Prevent form submission if passwords don't match
+                }
+
+                return true; // Allow form submission if passwords match
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Email').on('input', function () {
+                var emailValue = $(this).val().trim();
+
+                if (emailValue !== '') {
+                    $('#Email').addClass('border-danger'); // Apply error styling
+                    $('#EmailError').hide(); // Hide the #EmailError message when email is entered
+                }
+            });
+        });
+    </script>
+
+    <!-- Call the initMap function when the page loads -->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQ6gY2DAOJZyHRDIm0M2KDiBlNmzmGmY0&callback=initMap">
+    </script>
+
+
+
+
+
+    <!-- Bootstrap Scripts (from CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+</body>
+</html>

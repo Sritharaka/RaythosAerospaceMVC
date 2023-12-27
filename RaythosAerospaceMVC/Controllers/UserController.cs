@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using RaythosAerospaceMVC.Models;
 using RaythosAerospaceMVC.Repository;
-using System.Net;
 
 namespace RaythosAerospaceMVC.Controllers
 {
@@ -135,6 +135,93 @@ namespace RaythosAerospaceMVC.Controllers
         public ActionResult RegisterSuccess()
         {
             return View(); // Return view after successful registration
+        }
+
+        //public ActionResult UserUpdate()
+        //{
+        //    return View("UserUpdate"); // Return view after successful registration
+        //    //return RedirectToAction("UserUpdate", "User"); // Redirect to Home/Index upon successful login
+
+        //}
+
+        // GET: Aircrafts/Edit/5
+        public async Task<IActionResult> UserUpdate()
+        {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
+
+            var aircraft =  await _userRepository.GetUserByIdAsync(userId);
+            if (aircraft == null)
+            {
+                return View("UserUpdate");
+            }
+            return View("UserUpdate", aircraft);
+        }
+
+        // POST: Aircrafts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserUpdate([Bind("Id, Username, Email, Password, " +
+            "ConfirmPassword, PasswordSalt, CreateDate, UpdateDate, Address, FirstName, ImageUrl, LastName, PhoneNumber, Weight," +
+            " CreatedDate")] User user, IFormFile uploadedImage)
+        {
+            //if (id != aircraft.Id)
+            //{
+            //    return NotFound();
+            //}
+
+            if (ModelState.IsValid)
+            {
+                int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
+
+                var existingUser = await _userRepository.GetUserByIdAsync(userId);
+                if (existingUser == null)
+                {
+                    return RedirectToAction("index", "Home"); // Redirect to Home/Index upon successful login
+                }
+
+                try
+                {
+
+
+                    string imagePath = await _userRepository.UploadImage(uploadedImage);
+
+                    // Set the ImageUrl property of the aircraft
+                    user.ImageUrl = imagePath;
+                    user.UpdateDate = DateTime.Now;
+                    user.Id = userId;
+
+                     var newUserData =  await _userRepository.UpdateUser(user);
+                    //_logger.LogInformation($"Aircraft with ID {aircraft.Id} updated at {DateTime.Now}");
+
+                    if (newUserData)
+                    {
+                        return RedirectToAction("index", "Home"); // Redirect to Home/Index upon successful login
+
+                    }
+
+
+                    //return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    return BadRequest(); // Or handle the exception accordingly
+                }
+            }
+            return View("UserUpdate");
+        }
+
+
+        public async Task<IActionResult> UserDetails()
+        {
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
+
+            var existingUser = await _userRepository.GetUserByIdAsync(userId);
+            if (existingUser == null)
+            {
+                //return RedirectToAction("index", "Home"); // Redirect to Home/Index upon successful login
+            }
+            return PartialView("_UserDetailsPartial", existingUser);
         }
 
 
