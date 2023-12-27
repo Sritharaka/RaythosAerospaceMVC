@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaythosAerospaceMVC.Models;
 
@@ -11,9 +12,11 @@ using RaythosAerospaceMVC.Models;
 namespace RaythosAerospaceMVC.Migrations
 {
     [DbContext(typeof(AerospaceDbContext))]
-    partial class AerospaceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227121547_InitialSchdscs")]
+    partial class InitialSchdscs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,9 +294,6 @@ namespace RaythosAerospaceMVC.Migrations
 
                     b.Property<decimal?>("InventoryAvionicsSystems")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("InventoryDescription")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("InventoryEngines")
                         .HasColumnType("decimal(18,2)");

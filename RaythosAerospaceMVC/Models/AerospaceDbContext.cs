@@ -15,6 +15,7 @@ namespace RaythosAerospaceMVC.Models
         public DbSet<ManufacturingProgress> ManufacturingProgresses { get; set; }
         public DbSet<Delivery> Delivery { get; set; }
         public DbSet<Contact> Contact { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
 
 
 

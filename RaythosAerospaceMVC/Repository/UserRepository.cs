@@ -45,6 +45,7 @@ namespace RaythosAerospaceMVC.Repository
             userToAdd.Email = newUser.Email;
             userToAdd.Username = newUser.Username;
             userToAdd.CreateDate = DateTime.Now;
+            userToAdd.RoleId = 2;
 
             _context.Users.Add(userToAdd);
             _context.SaveChanges();

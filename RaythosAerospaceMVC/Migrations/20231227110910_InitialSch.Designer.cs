@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaythosAerospaceMVC.Models;
 
@@ -11,9 +12,11 @@ using RaythosAerospaceMVC.Models;
 namespace RaythosAerospaceMVC.Migrations
 {
     [DbContext(typeof(AerospaceDbContext))]
-    partial class AerospaceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227110910_InitialSch")]
+    partial class InitialSch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,94 +246,6 @@ namespace RaythosAerospaceMVC.Migrations
                     b.HasKey("DeliveryId");
 
                     b.ToTable("Delivery");
-                });
-
-            modelBuilder.Entity("RaythosAerospaceMVC.Models.Inventory", b =>
-                {
-                    b.Property<int>("InventoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryId"));
-
-                    b.Property<string>("AdditionalFeatures")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AircraftId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("BasePrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EngineType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("FuelCapacity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InteriorDesign")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("InventoryAircraftBody")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("InventoryAirframes")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("InventoryAvionicsSystems")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("InventoryDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("InventoryEngines")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("InventoryFuelTanks")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("InventorySeats")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("ManufacturingComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("MaximumSpeed")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ModelName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("SeatingCapacity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("SeatingType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("InventoryId");
-
-                    b.ToTable("Inventory");
                 });
 
             modelBuilder.Entity("RaythosAerospaceMVC.Models.ManufacturingProgress", b =>

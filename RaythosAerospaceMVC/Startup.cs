@@ -46,6 +46,7 @@ namespace RaythosAerospaceMVC
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             services.AddScoped<SmtpClient>();
 

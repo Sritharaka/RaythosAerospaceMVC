@@ -22,6 +22,8 @@ namespace RaythosAerospaceMVC.Models
         [NotMapped]
         public IFormFile? uploadedImage { get; set; }
 
+        public int? RoleId { get; set; }
+
 
 
     }

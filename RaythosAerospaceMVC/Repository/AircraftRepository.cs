@@ -31,6 +31,35 @@ namespace RaythosAerospaceMVC.Repository
         {
             _context.Aircrafts.Add(aircraft);
             await _context.SaveChangesAsync();
+
+            Inventory Inventory = new Inventory
+            {
+
+                AircraftId = aircraft.Id,
+                ModelName = aircraft.ModelName,
+                Manufacturer = aircraft.Manufacturer,
+                Description = aircraft.Description,
+                SeatingType = aircraft.SeatingType,
+                InteriorDesign = aircraft.InteriorDesign,
+                AdditionalFeatures = aircraft.AdditionalFeatures,
+                ImageUrl = aircraft.ImageUrl,
+                BasePrice = aircraft.BasePrice,
+                EngineType = aircraft.EngineType,
+                MaximumSpeed = aircraft.MaximumSpeed,
+                FuelCapacity = aircraft.FuelCapacity,
+                SeatingCapacity = aircraft.SeatingCapacity,
+                Weight = aircraft.Weight,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = aircraft.UpdatedDate,
+                DeletedDate = aircraft.DeletedDate,
+                uploadedImage = aircraft.uploadedImage,
+
+            };
+
+
+            _context.Inventory.Add(Inventory);
+            await _context.SaveChangesAsync();
+
         }
 
         public async Task UpdateAircraftAsync(Aircraft aircraft)
@@ -66,6 +95,61 @@ namespace RaythosAerospaceMVC.Repository
             //_context.Entry(existingAircraft).CurrentValues.SetValues(newAircraft);
 
             await _context.SaveChangesAsync();
+
+            var existingInventory = await _context.Inventory.FindAsync(aircraft.Id);
+
+            if(existingInventory != null)
+            {
+                existingInventory.ModelName = aircraft.ModelName;
+                existingInventory.Manufacturer = aircraft.Manufacturer;
+                existingInventory.Description = aircraft.Description;
+                existingInventory.SeatingType = aircraft.SeatingType;
+                existingInventory.InteriorDesign = aircraft.InteriorDesign;
+                existingInventory.ImageUrl = aircraft.ImageUrl;
+                existingInventory.BasePrice = aircraft.BasePrice;
+                existingInventory.EngineType = aircraft.EngineType;
+                existingInventory.MaximumSpeed = aircraft.MaximumSpeed;
+                existingInventory.SeatingCapacity = aircraft.SeatingCapacity;
+                existingInventory.FuelCapacity = aircraft.FuelCapacity;
+                existingInventory.Weight = aircraft.Weight;
+                existingInventory.UpdatedDate = aircraft.UpdatedDate;
+
+                await _context.SaveChangesAsync();
+
+
+            }
+            else
+            {
+                Inventory Inventory = new Inventory
+                {
+
+                    AircraftId = aircraft.Id,
+                    ModelName = aircraft.ModelName,
+                    Manufacturer = aircraft.Manufacturer,
+                    Description = aircraft.Description,
+                    SeatingType = aircraft.SeatingType,
+                    InteriorDesign = aircraft.InteriorDesign,
+                    AdditionalFeatures = aircraft.AdditionalFeatures,
+                    ImageUrl = aircraft.ImageUrl,
+                    BasePrice = aircraft.BasePrice,
+                    EngineType = aircraft.EngineType,
+                    MaximumSpeed = aircraft.MaximumSpeed,
+                    FuelCapacity = aircraft.FuelCapacity,
+                    SeatingCapacity = aircraft.SeatingCapacity,
+                    Weight = aircraft.Weight,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = aircraft.UpdatedDate,
+                    DeletedDate = aircraft.DeletedDate,
+                    uploadedImage = aircraft.uploadedImage,
+
+                };
+
+
+                _context.Inventory.Add(Inventory);
+                await _context.SaveChangesAsync();
+
+            }
+
         }
 
 
@@ -77,6 +161,14 @@ namespace RaythosAerospaceMVC.Repository
                 _context.Aircrafts.Remove(aircraft);
                 await _context.SaveChangesAsync();
             }
+
+            var inventory = await _context.Inventory.FindAsync(aircraftId);
+            if (inventory != null)
+            {
+                _context.Inventory.Remove(inventory);
+                await _context.SaveChangesAsync();
+            }
+
         }
 
         public async Task<string> UploadImage(IFormFile imageFile)
