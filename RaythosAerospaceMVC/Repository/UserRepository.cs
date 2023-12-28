@@ -3,6 +3,7 @@ using RaythosAerospaceMVC.Models;
 using System.Net.Mail;
 using System.Net;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace RaythosAerospaceMVC.Repository
 {
@@ -50,7 +51,7 @@ namespace RaythosAerospaceMVC.Repository
             _context.Users.Add(userToAdd);
             _context.SaveChanges();
 
-             SendNewUserEmail(newUser);
+            SendNewUserEmail(newUser);
 
 
             //return GenerateJwtToken(newUser);
@@ -151,6 +152,12 @@ namespace RaythosAerospaceMVC.Repository
 
             // Return null if the user is not found or the password is incorrect
             return null;
+        }
+
+        public async Task<List<User>> GetUserList()
+        {
+            // Find the user by email (assuming email is unique)
+            return await _context.Users.ToListAsync();
         }
 
 
@@ -306,6 +313,45 @@ namespace RaythosAerospaceMVC.Repository
                 // You might want to log the error using a proper logging library
                 // and consider returning an error response to the user if applicable
             }
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+
+            var existingUser = await _context.Users.FindAsync(user.Id);
+
+            if (existingUser == null)
+            {
+                throw new InvalidOperationException("Aircraft not found");
+            }
+            //var newAircraft = new Aircraft
+            //{
+
+            existingUser.RoleId = user.RoleId;
+            existingUser.UpdateDate = user.UpdateDate;
+
+
+
+            // Copy other properties as needed
+            //};
+
+            // Update the properties of the existingAircraft entity with the new values
+            //_context.Entry(existingAircraft).CurrentValues.SetValues(newAircraft);
+
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task DeleteUserAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+
+
         }
 
     }

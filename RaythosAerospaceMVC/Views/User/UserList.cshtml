@@ -1,14 +1,14 @@
-﻿@model Inventory
+﻿@model User
 
 
 @{
-    ViewData["Title"] = "Inventory Page";
+    ViewData["Title"] = "Aircraft Page";
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inventory Page</title>
+    <title>UserList Page</title>
     <!-- Bootstrap CSS (from CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="..." crossorigin="anonymous">
 
@@ -22,102 +22,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQ6gY2DAOJZyHRDIm0M2KDiBlNmzmGmY0"></script>
+    <style>
+        /* Set the size of the map container */
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 80px;
+        }
+    </style>
+
 </head>
 <body>
 
     <div style="margin-left: 40px; margin-top: 40px; width: 1150px;">
 
-        <h3 style="margin-bottom: 20px;">Inventory Details</h3>
+        <h3 style="margin-bottom: 20px;">User List</h3>
 
-        <form asp-action="Create" method="post" enctype="multipart/form-data" id="subMitId">
+        <form asp-action="UserUpdate" method="post" enctype="multipart/form-data" id="subMitId">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="ModelName">Aircraft Name</label>
-                        <input asp-for="ModelName" id="ModelName" placeholder="Aircraft Name" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ModelName ?? "")" readonly />
-                        <input asp-for="AircraftId" id="AircraftId" placeholder="Aircraft Id" name="AircraftId" class="form-control @(ViewData.ModelState.ContainsKey("AircraftId") && ViewData.ModelState["AircraftId"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.AircraftId.ToString() ?? "")" readonly style="display:none" />
-                        <span asp-validation-for="ModelName" class="text-danger"></span>
+                        <label asp-for="FirstName">First Name</label>
+                        <input asp-for="FirstName" placeholder="Enter First Name" id="FirstName" name="FirstName" class="form-control @(ViewData.ModelState.ContainsKey("FirstName") && ViewData.ModelState["FirstName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.FirstName ?? "")" readonly />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="Manufacturer">Manufacturer</label>
-                        <input asp-for="Manufacturer" id="Manufacturer" name="Manufacturer" placeholder="Manufacturer" class="form-control @(ViewData.ModelState.ContainsKey("Manufacturer") && ViewData.ModelState["Manufacturer"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.Manufacturer ?? "")" readonly />
-                        <span asp-validation-for="Manufacturer" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-          @*      <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="BasePrice" style="display:none">Base Price (USD)</label>
-                        <input asp-for="BasePrice" id="BasePrice" name="BasePrice" class="form-control @(ViewData.ModelState.ContainsKey("BasePrice") && ViewData.ModelState["BasePrice"].Errors.Count > 0 ? "border border-danger" : "")" required style="display:none"/>
-                        <span asp-validation-for="BasePrice" class="text-danger"></span>
-                    </div>
-                </div>*@
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="EngineType">Engine Type</label>
-                        <input asp-for="EngineType" placeholder="Engine Type" class="form-control  @(ViewData.ModelState.ContainsKey("EngineType") && ViewData.ModelState["EngineType"].Errors.Count > 0 ? "border border-danger" : "")" required readonly />
-                        <span asp-validation-for="EngineType" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="MaximumSpeed">Maximum Speed (km/h)</label>
-                        <input asp-for="MaximumSpeed" placeholder="Maximum Speed" id="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.MaximumSpeed.ToString() ?? "")" required readonly />
-                        <span asp-validation-for="MaximumSpeed" class="text-danger"></span>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="SeatingType">Seating Type</label>
-                        <input asp-for="SeatingType" placeholder="Seating Type" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.SeatingType ?? "")" required readonly />
-                        <span asp-validation-for="SeatingType" class="text-danger"></span>
-                    </div>
-                </div>
-
-      @*          <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="EngineType" style="display:none">Engine Type</label>
-                        <input asp-for="EngineType" class="form-control @(ViewData.ModelState.ContainsKey("EngineType") && ViewData.ModelState["EngineType"].Errors.Count > 0 ? "border border-danger" : "")" required style="display:none" />
-                        <span asp-validation-for="EngineType" class="text-danger"></span>
-                    </div>
-                </div>*@
-
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="SeatingCapacity">Seating Capacity</label>
-                        <input asp-for="SeatingCapacity" id="SeatingCapacity" name="SeatingCapacity" placeholder="Seating Capacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.SeatingCapacity.ToString() ?? "")" required readonly />
-                        <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="InventorySeats">Seats</label>
-                        <input asp-for="InventorySeats" id="InventorySeats" placeholder="Inventory Seats" name="InventorySeats" class="form-control @(ViewData.ModelState.ContainsKey("InventorySeats") && ViewData.ModelState["InventorySeats"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InventorySeats.ToString() ?? "")" />
-                        <span asp-validation-for="InventorySeats" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="InventoryAircraftBody">Aircraft Bodys</label>
-                        <input asp-for="InventoryAircraftBody" id="InventoryAircraftBody" name="InventoryAircraftBody" placeholder="Inventory Aircraft Bodys" class="form-control @(ViewData.ModelState.ContainsKey("InventoryAircraftBody") && ViewData.ModelState["InventoryAircraftBody"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InventoryAircraftBody.ToString() ?? "")"  />
-                        <span asp-validation-for="InventoryAircraftBody" class="text-danger"></span>
+                        <label asp-for="LastName">Last Name</label>
+                        <input asp-for="LastName" placeholder="Enter Last Name" id="LastName" name="LastName" class="form-control @(ViewData.ModelState.ContainsKey("LastName") && ViewData.ModelState["LastName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.LastName ?? "")" readonly />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -125,101 +63,70 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="InventoryEngines">Engines</label>
-                        <input asp-for="InventoryEngines" id="InventoryEngines" placeholder="Inventory Engines" name="InventoryEngines" class="form-control @(ViewData.ModelState.ContainsKey("InventoryEngines") && ViewData.ModelState["InventoryEngines"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InventoryEngines.ToString() ?? "")" />
-                        <span asp-validation-for="InventoryEngines" class="text-danger"></span>
+                        <label asp-for="Email">Email</label>
+                        <input asp-for="Email" id="Email" name="Email" type="text" placeholder="Enter Email" class="form-control @(ViewData.ModelState.ContainsKey("Email") && ViewData.ModelState["Email"].Errors.Count > 0 ? "border border-danger" : "")" required readonly/>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
+                    <span id="EmailError" style="display: none; color: red;">Please enter a valid email address</span>
                 </div>
+
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="InventoryAirframes">Airframes</label>
-                        <input asp-for="InventoryAirframes" id="InventoryAirframes" name="InventoryAirframes" placeholder="Inventory Airframes" class="form-control @(ViewData.ModelState.ContainsKey("InventoryAirframes") && ViewData.ModelState["InventoryAirframes"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InventoryAirframes.ToString() ?? "")" />
-                        <span asp-validation-for="InventoryAirframes" class="text-danger"></span>
+                        <label asp-for="PhoneNumber">Phone Number</label>
+                        <input asp-for="PhoneNumber" id="PhoneNumber" name="PhoneNumber" placeholder="Enter Phone Number" class="form-control @(ViewData.ModelState.ContainsKey("PhoneNumber") && ViewData.ModelState["PhoneNumber"].Errors.Count > 0 ? "border border-danger" : "")" required disabled/>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
+
+
             </div>
-
-
+@*
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="InventoryAvionicsSystems">Avionics Systems</label>
-                        <input asp-for="InventoryAvionicsSystems" id="InventoryAvionicsSystems" placeholder="Inventory Avionics Systems" name="InventoryAvionicsSystems" class="form-control @(ViewData.ModelState.ContainsKey("InventoryAvionicsSystems") && ViewData.ModelState["InventoryAvionicsSystems"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InventoryAvionicsSystems.ToString() ?? "")" />
-                        <span asp-validation-for="InventoryAvionicsSystems" class="text-danger"></span>
+                        <label asp-for="Password">Password</label>
+                        <input asp-for="Password" id="Password" name="Password" placeholder="Enter Password" class="form-control @(ViewData.ModelState.ContainsKey("Password") && ViewData.ModelState["Password"].Errors.Count > 0 ? "border border-danger" : "")" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
+
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label asp-for="InventoryFuelTanks">Fuel Tanks</label>
-                        <input asp-for="InventoryFuelTanks" id="InventoryFuelTanks" name="InventoryFuelTanks" placeholder="Inventory FuelTanks" class="form-control @(ViewData.ModelState.ContainsKey("InventoryFuelTanks") && ViewData.ModelState["InventoryFuelTanks"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InventoryFuelTanks.ToString() ?? "")" />
-                        <span asp-validation-for="InventoryFuelTanks" class="text-danger"></span>
+                        <label asp-for="ConfirmPassword">Confirm Password</label>
+                        <input asp-for="ConfirmPassword" id="ConfirmPassword" name="ConfirmPassword" placeholder="Enter Confirm Password" class="form-control @(ViewData.ModelState.ContainsKey("PhoneNumber") && ViewData.ModelState["PhoneNumber"].Errors.Count > 0 ? "border border-danger" : "")" required />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
                     </div>
+                    <span id="passwordError" style="display: none; color: red;">Passwords do not match.</span>
+
                 </div>
+
+
+            </div>*@
+
+            <div class="form-group">
+                <label asp-for="Address">Address</label>
+                <textarea asp-for="Address" placeholder="Enter Address" class="form-control @(ViewData.ModelState.ContainsKey("Address") && ViewData.ModelState["Address"].Errors.Count > 0 ? "border border-danger" : "")" required disabled></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="InventoryDescription" >Inventory Description</label>
-                <textarea asp-for="InventoryDescription" id="InventoryDescription" name="InventoryDescription" placeholder="Additional Details" class="form-control @(ViewData.ModelState.ContainsKey("InventoryDescription") && ViewData.ModelState["InventoryDescription"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
-                <span asp-validation-for="InventoryDescription" class="text-danger"></span>
+                <label asp-for="RoleId">Role Name</label>
+                <select asp-for="RoleId" class="form-control" id="RoleId" name="RoleId">
+                    <option value="" selected>Select Role</option>
+                    <option value="1">Admin</option>
+                    <option value="2">Customer</option>
+                </select>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
             </div>
 
-
-       @*     <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="InteriorDesign" style="display:none">Interior Design</label>
-                        <input asp-for="InteriorDesign" class="form-control @(ViewData.ModelState.ContainsKey("InteriorDesign") && ViewData.ModelState["InteriorDesign"].Errors.Count > 0 ? "border border-danger" : "")" required style="display:none" />
-                        <span asp-validation-for="InteriorDesign" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="FuelCapacity" style="display:none">Fuel Capacity (L)</label>
-                        <input asp-for="FuelCapacity" class="form-control @(ViewData.ModelState.ContainsKey("FuelCapacity") && ViewData.ModelState["FuelCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required style="display:none" />
-                        <span asp-validation-for="FuelCapacity" class="text-danger"></span>
-                    </div>
-                </div>
-
-
-            </div>
-*@
-@*            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="SeatingCapacity">Seating Capacity</label>
-                        <input asp-for="SeatingCapacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required readonly />
-                        <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label asp-for="Weight" style="display:none">Weight (kg)</label>
-                        <input asp-for="Weight" class="form-control @(ViewData.ModelState.ContainsKey("Weight") && ViewData.ModelState["Weight"].Errors.Count > 0 ? "border border-danger" : "")" required style="display:none" />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
-                    </div>
-                </div>
-
-
-            </div>*@
-
-
- @*           <div class="form-group">
-                <label asp-for="InventoryDescription" style="display:none">InventoryDescription</label>
-                <textarea asp-for="InventoryDescription" class="form-control @(ViewData.ModelState.ContainsKey("InventoryDescription") && ViewData.ModelState["InventoryDescription"].Errors.Count > 0 ? "border border-danger" : "")" required ></textarea>
-                <span asp-validation-for="InventoryDescription" class="text-danger"></span>
-            </div>*@
-
-
-
-
-
- @*           <div class="form-group">
-                <label asp-for="uploadedImage">Aircraft Image</label>
-                <input asp-for="uploadedImage" type="file" class="form-control-file @(ViewData.ModelState.ContainsKey("uploadedImage") && ViewData.ModelState["uploadedImage"].Errors.Count > 0 ? "is-invalid" : "")" required />
+      @*      <div class="form-group">
+                <label asp-for="uploadedImage">User Image</label>
+                <input asp-for="uploadedImage" id="uploadedImage" name="uploadedImage" type="file" class="form-control-file @(ViewData.ModelState.ContainsKey("uploadedImage") && ViewData.ModelState["uploadedImage"].Errors.Count > 0 ? "is-invalid border border-danger" : "")" required />
                 <span asp-validation-for="uploadedImage" class="text-danger"></span>
             </div>*@
+
+
 
 
             <!-- Include other input fields for the remaining properties -->
@@ -228,22 +135,24 @@
                 @*<input type="submit" value="Add Aircraft" class="btn btn-primary" />*@
 
                 <!-- Button with Bootstrap Icon -->
-         @*       <button type="submit" id="submitAircraft" class="btn btn-primary">
-                    <i class="bi bi-plus"></i> Add Stock
+        @*        <button type="submit" id="submitAircraft" class="btn btn-success">
+                    <i class="bi bi-pencil me-2"></i> User Update
                 </button>*@
-
+                
                 <button type="button" id="updateAircraft" class="btn btn-danger">
-                    <i class="bi bi-pencil me-2"></i> Update
+                <i class="bi bi-pencil me-2"></i> Update 
                 </button>
 
                 <!-- Button to load the aircraft list (without triggering form submission) -->
                 <button type="button" id="loadAircraftList" class="btn btn-success" >
-                    <i class="bi bi-list"></i> Stock List
+                <i class="bi bi-list"></i> User List
                 </button>
 
             </div>
         </form>
 
+        @*        <div id="map"></div>
+        *@
 
 
     </div>
@@ -251,9 +160,9 @@
 
 
     <!-- Include the partial view -->
-    <div id="displayInventoryTable">
-        <!-- Aircraft list will be displayed here -->
-        @await Html.PartialAsync("_DisplayInventoryTable", Model) <!-- Assuming Model contains IPagedList<Aircraft> -->
+        <div id="displayUserTable">
+    <!-- Aircraft list will be displayed here -->
+        @await Html.PartialAsync("_DisplayUserTable", Model) <!-- Assuming Model contains IPagedList<Aircraft> -->
 
     </div>
 
@@ -263,10 +172,10 @@
             $('#loadAircraftList').click(function () {
                 // Make an AJAX request to load the aircraft list
                 $.ajax({
-                    url: '/Inventory/_DisplayInventoryTable',
+                    url: '/User/_DisplayUserTable',
                     type: 'GET',
                     success: function (data) {
-                        $('#displayInventoryTable').html(data); // Update the aircraft table
+                        $('#displayUserTable').html(data); // Update the aircraft table
                     },
                     error: function () {
                         console.error('Error loading aircraft list');
@@ -283,7 +192,7 @@
 
             // Array of field IDs to validate
             var fieldIds = [
-                'InventorySeats', 'InventoryEngines', 'InventoryAircraftBody', 'InventoryAirframes', 'InventoryAvionicsSystems', 'InventoryFuelTanks', 'InventoryDescription', 'AircraftId'
+                'Email', 'RoleId'
                 // Add other field IDs to be validated
             ];
 
@@ -299,6 +208,16 @@
                 }
             });
 
+            if ($('#Email').val() === '') {
+                isValid = false;
+                $('#Email').addClass('border-danger'); // Apply error styling
+                $('#EmailError').show();
+            } else {
+                $('#Email').removeClass('border-danger');
+                $('#EmailError').hide();
+                // Remove error styling if field is valid
+            }
+
             return isValid;
         }
 
@@ -313,13 +232,14 @@
                     $(this).removeClass('border border-danger'); // Remove red border for valid fields on blur
                 }
             });
+
         }
 
         // Attach blur event listeners to the fields for real-time validation
         $(document).ready(function () {
             // Array of field IDs to validate on blur
             var fieldIds = [
-                'InventorySeats', 'InventoryEngines', 'InventoryAircraftBody', 'InventoryAirframes', 'InventoryAvionicsSystems', 'InventoryFuelTanks', 'InventoryDescription', 'AircraftId'
+                'Email', 'RoleId'
                 // Add other field IDs to be validated on blur
             ];
 
@@ -327,6 +247,22 @@
             fieldIds.forEach(function (fieldId) {
                 validateFieldsRealTime(fieldId); // Attach blur event listener to each field
             });
+
+            function validateEmailField() {
+                var isValid = true;
+
+                // Validate ModelName field
+                if ($('#Email').val() === '') {
+                    isValid = false;
+                    $('#Email').addClass('border-danger'); // Apply error styling
+                    $('#EmailError').show();
+                } else {
+                    $('#Email').removeClass('border-danger');
+                    $('#EmailError').hide();
+                    // Remove error styling if field is valid
+                }
+                return isValid;
+            }
 
             // Event listener for clicking the submitAircraft button
             $('#submitAircraft').click(function (event) {
@@ -364,12 +300,12 @@
         //        }
         //    });
         //}
-        var inventoryId = null;
+        var aircraftId = null;
         //// Click event for the Update button
         $(document).on('click', '.editBtn', function () {
-            inventoryId = $(this).data('id');
+            aircraftId = $(this).data('id');
             //updateAircraft(aircraftId); // Call the function passing the aircraftId
-            //inventoryId = $('#Id').val()
+
         });
 
         $(document).ready(function () {
@@ -379,30 +315,23 @@
                 if (validateFields()) {
                     // If fields are valid, construct the data object
                     var aircraftData = {
-                        ModelName: $('#ModelName').val(),
-                        Manufacturer: $('#Manufacturer').val(),
-                        AircraftId: $('#AircraftId').val(),
-                        SeatingType: $('#SeatingType').val(),
+                        Email: $('#Email').val(),
+                        FirstName: $('#FirstName').val(),
+                        LastName: $('#LastName').val(),
+                        //Description: $('#Description').val(),
+                        //SeatingType: $('#SeatingType').val(),
                         //InteriorDesign: $('#InteriorDesign').val(),
                         //uploadedImage: $('#uploadedImage').val(),
                         //BasePrice: $('#BasePrice').val(),
-                        EngineType: $('#EngineType').val(),
-                        MaximumSpeed: $('#MaximumSpeed').val(),
-                        SeatingCapacity: $('#SeatingCapacity').val(),
+                        //EngineType: $('#EngineType').val(),
+                        //MaximumSpeed: $('#MaximumSpeed').val(),
+                        //SeatingCapacity: $('#SeatingCapacity').val(),
                         //FuelCapacity: $('#FuelCapacity').val(),
                         //Weight: $('#Weight').val(),
                         //ImageUrl: $('#ImageUrl').val(),
-                        //ImageUrl: $('#ImageUrl').val(),
+                        RoleId: $('#RoleId').val(),
                         //CreatedDate: $('#CreatedDate').val(),
-                        InventoryId: inventoryId,
-                        InventorySeats: $('#InventorySeats').val(),
-                        InventoryEngines: $('#InventoryEngines').val(),
-                        InventoryAircraftBody: $('#InventoryAircraftBody').val(),
-                        InventoryAirframes: $('#InventoryAirframes').val(),
-                        InventoryAvionicsSystems: $('#InventoryAvionicsSystems').val(),
-                        InventoryFuelTanks: $('#InventoryFuelTanks').val(),
-                        ManufacturingComplete: $('#ManufacturingComplete').val(),
-                        InventoryDescription: $('#InventoryDescription').val(),
+                        Id: aircraftId
 
 
 
@@ -411,15 +340,17 @@
 
 
                     //var aircraftId = $('#Id').val();
-                    console.log(inventoryId)
+                    console.log(aircraftId)
                     // Perform update action with the constructed aircraftData object
                     // You can make an AJAX request or call a function to update the data here
-                    updateAircraftData(aircraftData, inventoryId);
+                    updateAircraftData(aircraftData, aircraftId);
                 } else {
                     // Fields are not valid, display an error message or perform necessary action
                     alert('Please fill all required fields with valid data.');
                 }
             });
+
+
 
             // Function to validate fields
             //function validateFields() {
@@ -524,11 +455,13 @@
             //    return isValid;
             //}
 
+
+
             // Function to update the aircraft data
             function updateAircraftData(data, aircraftId) {
                 // Perform the update action here using the 'data' object
                 // For example, make an AJAX request to update the data on the server
-                var Url = '/Inventory/Edit/' + aircraftId;
+                var Url = '/User/Edit/' + aircraftId;
 
                 var formData = new FormData();
 
@@ -559,10 +492,10 @@
                         $('#submitAircraft').show();
                         $('#updateAircraft').hide();
 
-                        toastr.success('Aircraft data updated successfully.', 'Success', {
+                        toastr.success('User Role updated successfully.', 'Success', {
                             closeButton: true,
                             progressBar: true,
-                            timeOut: 50000 // Time duration the toast will be displayed (in milliseconds)
+                            timeOut: 5000 // Time duration the toast will be displayed (in milliseconds)
                         });
 
                         // Delay the reload slightly to allow users to see the toast
@@ -593,6 +526,74 @@
 
 
 
+    </script>
+
+
+
+    <script>
+        // Initialize and display the map
+        function initMap() {
+            // Set initial coordinates
+            const initialCoordinates = { lat: 6.9271, lng: 79.8612 };
+
+            // Create a new map object centered at the initial coordinates
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10, // Set the initial zoom level
+                center: initialCoordinates, // Set the initial center of the map
+            });
+
+            // Create a marker at the initial coordinates
+            const marker = new google.maps.Marker({
+                position: initialCoordinates,
+                map: map,
+                title: "Colombo", // Title displayed on marker hover
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#ConfirmPassword').on('keyup', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $(this).val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').show();
+                } else {
+                    $('#passwordError').hide();
+                }
+            });
+
+            $('form').on('submitAircraft', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $('#ConfirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').show();
+                    return false; // Prevent form submission if passwords don't match
+                }
+
+                return true; // Allow form submission if passwords match
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Email').on('input', function () {
+                var emailValue = $(this).val().trim();
+
+                if (emailValue !== '') {
+                    $('#Email').addClass('border-danger'); // Apply error styling
+                    $('#EmailError').hide(); // Hide the #EmailError message when email is entered
+                }
+            });
+        });
+    </script>
+
+    <!-- Call the initMap function when the page loads -->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQ6gY2DAOJZyHRDIm0M2KDiBlNmzmGmY0&callback=initMap">
     </script>
 
 

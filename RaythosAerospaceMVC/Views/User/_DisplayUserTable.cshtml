@@ -1,0 +1,417 @@
+﻿@*@model X.PagedList.IPagedList<Aircraft>
+*@
+
+@model X.PagedList.IPagedList<RaythosAerospaceMVC.Models.User>
+
+@if (Model != null && Model.Count > 0)
+{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <!-- Add your meta tags, title, and other external styles and scripts here -->
+
+        <style>
+            /* CSS styles for the popup */
+            .popup-container {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
+            }
+
+            .popup-content {
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                margin-top: 100px;
+                margin-left: 550px;
+                margin-right: 550px;
+            }
+
+            .popup-buttons {
+                margin-top: 20px;
+            }
+
+            .btn {
+                padding: 8px 20px;
+                margin: 0 10px;
+                cursor: pointer;
+            }
+
+            .btn-confirm {
+                background-color: #4caf50;
+                color: white;
+                border: none;
+            }
+
+            .btn-cancel {
+                background-color: #f44336;
+                color: white;
+                border: none;
+            }
+        </style>
+
+        <!-- Toastr CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Toastr JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    </head>
+    <body>
+
+        <div style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+
+            <div class="container mt-4">
+                <h5 class="mb-4" style="margin-bottom:20px; margin-top:20px;">User List</h5>
+
+                <!-- Table to display Aircraft data -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Address</th>
+                                <th>Phone Number</th>
+                                <th>Create Date</th>
+                                <th>Username</th>
+                                <th>RoleId</th>
+                                <th>ImageUrl</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                                <!-- Add more table headers for other fields if needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var aircraft in Model)
+                            {
+                                <tr>
+                                    <td>@aircraft.Id</td>
+                                    <td>@aircraft.FirstName</td>
+                                    <td>@aircraft.LastName</td>
+                                    <td>@aircraft.Email</td>
+                                    <td>@aircraft.Password</td>
+                                    <td>@aircraft.Address</td>
+                                    <td>@aircraft.PhoneNumber</td>
+                                    <td>@aircraft.CreateDate</td>
+                                    <td>@aircraft.Username</td>
+                                    <td>@aircraft.RoleId</td>
+                                    <td>@aircraft.ImageUrl</td>
+                                    <td>
+                                        <button type="button" id="update" class="btn btn-outline-success d-flex align-items-center editBtn" data-id="@aircraft.Id">
+                                            <i class="bi bi-pencil me-2"></i>
+                                            <span>Update</span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" id="delete" class="btn btn-outline-danger d-flex align-items-center deleteBtn" data-id="@aircraft.Id">
+                                            <i class="bi bi-trash me-2"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    </td>
+
+                                    <!-- Add more table cells for other fields if needed -->
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Custom pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination  mt-4">
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="#" data-page="@(Model.PageNumber - 1)">Previous</a>
+                            </li>
+                        }
+
+                        @for (var i = 1; i <= Model.PageCount; i++)
+                        {
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" href="#" data-page="@i">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="#" data-page="@(Model.PageNumber + 1)">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+
+                <!-- Popup HTML structure -->
+                <div class="popup-container" id="popup">
+                    <div class="popup-content">
+                        <p>Do you want to update?</p>
+                        <div class="popup-buttons">
+                            <button class="btn btn-confirm">Yes</button>
+                            <button class="btn btn-cancel">No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popup HTML structure -->
+                <div class="popup-container" id="popupDelete">
+                    <div class="popup-content">
+                        <p>Are you sure you want to delete this User?</p>
+                        <div class="popup-buttons">
+                            <button class="btn btn-confirm">Yes</button>
+                            <button class="btn btn-cancel">No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="paymentContainer">
+                    <!-- Content to be updated from the AJAX response will appear here -->
+                </div>
+
+                <!-- AJAX Script for Pagination -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // Listen for pagination link clicks
+                        $('.pagination a').click(function (e) {
+                            e.preventDefault();
+                            var page = $(this).data('page');
+
+                            // Make an AJAX request to load the specific page of aircraft list
+                            $.ajax({
+                                url: '/Aircraft/_DisplayAircraftTable?page=' + page,
+                                type: 'GET',
+                                success: function (data) {
+                                    $('#displayAircraftTable').html(data); // Update the aircraft table
+                                },
+                                error: function () {
+                                    console.error('Error loading aircraft list');
+                                }
+                            });
+                        });
+                    });
+
+                    //$(document).ready(function () {
+                    //    $('.editBtn').click(function (e) {
+                    //        e.preventDefault();
+                    //        var aircraftId = $(this).data('id');
+                    //        // AJAX request to get the details of the selected aircraft
+                    //        $.ajax({
+                    //            url: '/Aircraft/Details/' + aircraftId, // Replace with your appropriate endpoint
+                    //            //url: '/Aircraft/Aircraft/'
+                    //            type: 'GET',
+                    //            success: function (data) {
+                    //                // Update the input fields in Aircraft.cshtml with the retrieved data
+                    //                $('#ModelName').val(data.ModelName); // Replace '#ModelName' with the appropriate ID of the input field
+                    //                $('#Manufacturer').val(data.Manufacturer); // Replace '#Manufacturer' with the appropriate ID of the input field
+                    //                $('#BasePrice').val(data.BasePrice);
+                    //                $('#MaximumSpeed').val(data.MaximumSpeed);
+                    //                // Update other input fields similarly with their respective data properties
+                    //                // ...
+
+                    //                // Assuming 'data' contains the URL of the image, update the image URL if needed
+                    //                $('#AircraftImage').attr('src', data.ImageUrl);
+                    //            },
+                    //            error: function () {
+                    //                console.error('Error loading aircraft details');
+                    //                $('#ModelName').val('Your Hardcoded Value');
+                    //                $('#Manufacturer').val('Your Hardcoded Value2'); // Replace '#Manufacturer' with the appropriate ID of the input field
+                    //                $('#BasePrice').val(5);
+                    //                $('#MaximumSpeed').val(6);
+                    //                // Update other input fields similarly with their respective data properties
+                    //                // ...
+
+                    //                // Assuming 'data' contains the URL of the image, update the image URL if needed
+                    //                $('#AircraftImage').attr('src', 'Your Hardcoded Value');
+                    //            }
+                    //        });
+                    //    });
+                    //});
+
+
+                    $(document).ready(function () {
+                        // Function to convert table cell values to a JSON object
+                        function convertTableDataToJSON(aircraftId) {
+                            var jsonObject = {};
+                            //var aircraftId = $(this).data('id');
+                            console.log(aircraftId)
+
+                            // Loop through each table row in the tbody
+                            $('tbody tr').each(function (index) {
+                                var columns = $(this).find('td'); // Get all columns of the current row
+
+                                // Extract the ID from the first column of the current row
+                                var rowAircraftId = columns.eq(0).text().trim();; // Assuming ID is in the first column
+                                console.log(rowAircraftId)
+
+                                // Check if the current row's ID matches the provided aircraftId
+                                if (rowAircraftId === String(aircraftId).trim()) {
+                                    // Assign data to the JSON object only if the IDs match
+                                    jsonObject = {
+                                        "Id": columns.eq(0).text(),
+                                        "FirstName": columns.eq(1).text(),
+                                        "LastName": columns.eq(2).text(),
+                                        "Email": columns.eq(3).text(),
+                                        "Password": columns.eq(4).text(),
+                                        "Address": columns.eq(5).text(),
+                                        "PhoneNumber": columns.eq(6).text(),
+                                        "CreateDate": columns.eq(7).text(),
+                                        "Username": columns.eq(8).text(),
+                                        "RoleId": columns.eq(9).text(),
+                                        "ImageUrl": columns.eq(10).text(),
+                                        // Add more properties if needed following the same pattern
+                                    };
+
+                                    $('#Id').val(columns.eq(0).text());
+                                    $('#FirstName').val(columns.eq(1).text());
+                                    $('#LastName').val(columns.eq(2).text());
+                                    $('#Email').val(columns.eq(3).text());
+                                    $('#Password').val(columns.eq(4).text());
+                                    $('#Address').val(columns.eq(5).text());
+                                    $('#PhoneNumber').val(columns.eq(6).text());
+                                    $('#CreateDate').val(columns.eq(7).text());
+                                    $('#Username').val(columns.eq(8).text());
+                                    $('#RoleId').val(columns.eq(9).text());
+                                    $('#ImageUrl').val(columns.eq(10).text());
+                             
+
+                                    return false; // Break out of the loop since the desired row is found
+                                }
+                            });
+
+                            // Convert the JavaScript object to a JSON string
+                            var jsonString = JSON.stringify(jsonObject);
+                            console.log(jsonString); // Output JSON string to console (you can modify this based on your needs)
+                            return jsonString; // Return the JSON string if needed
+                        }
+
+                        // Click event for '.editBtn'
+                        $('#updateAircraft').hide();
+
+                        // Click event for '.editBtn'
+                        $('.editBtn').click(function (e) {
+                            e.preventDefault();
+                            var aircraftId = $(this).data('id');
+
+                            // Show the popup
+                            $('#popup').fadeIn();
+
+                            $('.btn-confirm').click(function () {
+                                // User clicked Yes, perform the update action
+                                convertTableDataToJSON(aircraftId);
+                                // Hide the popup after action
+                                $('#popup').fadeOut();
+                                // Show 'updateAircraft' button and hide 'submitAircraft' button
+                                $('#updateAircraft').show();
+                                $('#submitAircraft').hide();
+                            });
+
+                            $('.btn-cancel').click(function () {
+                                // User clicked No, do nothing or perform alternative action
+                                // Hide the popup
+                                $('#popup').fadeOut();
+                                // Show 'updateAircraft' button and hide 'submitAircraft' button
+                                $('#updateAircraft').hide();
+                                $('#submitAircraft').show();
+                            });
+                        });
+
+
+                        //// Event listener for clicking the updateAircraft button
+                        //$('#updateAircraft').click(function () {
+                        //    // Hide the updateAircraft button
+                        //    $(this).hide();
+                        //    // Show the submitAircraft button
+                        //    $('#submitAircraft').show();
+                        //});
+
+
+                    });
+
+
+                    // Assuming this script is within a <script> tag or a JavaScript file loaded into your page
+                    $(document).ready(function () {
+                        $('.deleteBtn').click(function () {
+                            var aircraftId = $(this).data('id');
+
+                            // Show a confirmation dialog before deleting the aircraft
+
+
+                            // Show the popup
+                            $('#popupDelete').fadeIn();
+
+                            $('.btn-confirm').click(function () {
+                                // User clicked Yes, perform the update action
+
+                                $.ajax({
+                                    url: '/User/Delete/' + aircraftId, // Replace with your endpoint for deleting aircraft
+                                    type: 'POST', // or 'DELETE' if your API supports DELETE requests
+                                    headers: {
+                                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                                        // Adjust the selector based on your specific anti-forgery token input
+                                    },
+                                    success: function (response) {
+                                        // Handle success response after deleting data
+                                        console.log('Aircraft deleted successfully.');
+                                        // Perform any additional actions like removing the deleted aircraft from the table
+                                        toastr.success('User deleted successfully.', 'Success', {
+                                            closeButton: true,
+                                            progressBar: true,
+                                            timeOut: 50000 // Time duration the toast will be displayed (in milliseconds)
+                                        });
+
+                                        // Delay the reload slightly to allow users to see the toast
+                                        setTimeout(function () {
+                                            location.reload(); // Reload the page after 2 seconds
+                                        }, 3000); // Adjust the delay time as needed
+
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error deleting aircraft:', error);
+                                        // Handle error response
+                                    }
+                                });                                // Hide the popup after action
+                                $('#popupDelete').fadeOut();
+                                // Show 'updateAircraft' button and hide 'submitAircraft' button
+
+                            });
+
+                            $('.btn-cancel').click(function () {
+                                // User clicked No, do nothing or perform alternative action
+                                // Hide the popup
+                                $('#popupDelete').fadeOut();
+                                // Show 'updateAircraft' button and hide 'submitAircraft' button
+                            });
+
+
+
+
+                        });
+                    });
+
+
+                </script>
+
+            </div>
+        </div>
+
+    </body>
+    </html>
+}
+else
+{
+    @*<p>No aircraft data available.</p>*@
+}

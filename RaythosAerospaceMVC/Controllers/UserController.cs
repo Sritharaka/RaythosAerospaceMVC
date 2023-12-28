@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RaythosAerospaceMVC.Models;
 using RaythosAerospaceMVC.Repository;
+using X.PagedList;
 
 namespace RaythosAerospaceMVC.Controllers
 {
@@ -222,6 +223,88 @@ namespace RaythosAerospaceMVC.Controllers
                 //return RedirectToAction("index", "Home"); // Redirect to Home/Index upon successful login
             }
             return PartialView("_UserDetailsPartial", existingUser);
+        }
+
+
+        public async Task<IActionResult> _DisplayUserTable(int? page)
+        {
+            int pageNumber = page ?? 1; // If no page is specified, default to page 1
+            int pageSize = 10; // Number of items per page
+
+            var users = await _userRepository.GetUserList();
+
+            // Return a paged list
+            var pagedUsers = users.ToPagedList(pageNumber, pageSize);
+
+            return PartialView("_DisplayUserTable", pagedUsers);
+        }
+
+        public ActionResult UserList()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var existingUser = await _userRepository.GetUserByIdAsync(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+            return View(existingUser);
+        }
+
+        // POST: Aircrafts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("Id, ModelName, Manufacturer, Description, " +
+            "BasePrice, AirframeProgress, AvionicsSystemsProgress, EnginesProgress," +
+            " InteriorProgress, OverallProgress, DeliveryDate, ManufacturingComplete, " +
+            "Telephone, EmailAddress, CardHolderName, ShippingDate," +
+            " AdditionalDetails, AirportCity, AircraftId, SeatingCapacity, Email, RoleId"
+            )] User user)
+        {
+            //if (id != aircraft.Id)
+            //{
+            //    return NotFound();
+            //}
+
+            if (ModelState.IsValid)
+            {
+                var existingUser = await _userRepository.GetUserByIdAsync(user.Id);
+                if (existingUser == null)
+                {
+                    return NotFound();
+                }
+
+                try
+                {
+
+
+
+                    // Set the ImageUrl property of the aircraft
+                    user.UpdateDate = DateTime.Now;
+
+                    await _userRepository.UpdateAsync(user);
+                    return RedirectToAction("UserList", "User"); // Redirect to Home/Index upon successful login
+
+                    //return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    return BadRequest(); // Or handle the exception accordingly
+                }
+            }
+            return View(user);
+        }
+
+        // POST: Aircrafts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _userRepository.DeleteUserAsync(id);
+            return RedirectToAction("UserList", "User");
         }
 
 

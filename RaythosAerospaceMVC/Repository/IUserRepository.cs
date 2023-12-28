@@ -12,6 +12,10 @@ namespace RaythosAerospaceMVC.Repository
 
         Task<string> UploadImage(IFormFile imageFile);
         Task<bool> UpdateUser(User updatedUser);
+        Task<List<User>> GetUserList();
+        Task UpdateAsync(User user);
+
+        Task DeleteUserAsync(int id);
 
 
     }
