@@ -51,7 +51,7 @@ namespace RaythosAerospaceMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind("DeliveryId, ManufacturingStatusId, ModelName, Manufacturer, Description, " +
-            "BasePrice, AirframeProgress, AvionicsSystemsProgress, EnginesProgress, InteriorProgress, OverallProgress, DeliveryDate, ManufacturingComplete, Telephone, EmailAddress, CardHolderName, ShippingDate, AdditionalDetails, AirportCity, DeliveryComplete, DeliveryCompleteDate, DeliveryCompleteDescription, WarrentyYears"
+            "BasePrice, AirframeProgress, AvionicsSystemsProgress, EnginesProgress, InteriorProgress, OverallProgress, DeliveryDate, ManufacturingComplete, Telephone, EmailAddress, CardHolderName, ShippingDate, AdditionalDetails, AirportCity, DeliveryComplete, DeliveryCompleteDate, DeliveryCompleteDescription, WarrentyYears, AircraftId"
             )] Delivery delivery)
         {
             if (ModelState.IsValid)

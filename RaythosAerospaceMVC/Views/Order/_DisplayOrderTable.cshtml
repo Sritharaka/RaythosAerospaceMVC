@@ -106,6 +106,9 @@
                                 <th>Additional Details</th>
                                 <th>Airport City</th>
                                 <th>Delivery Complete</th>
+                                <th style="display:none">AircraftId</th>
+                                <th style="display:none">SeatingCapacity</th>
+
 
 
                                 <th>Update</th>
@@ -145,6 +148,9 @@
                                     <td>@aircraft.AdditionalDetails</td>
                                     <td>@aircraft.AirportCity</td>
                                     <td>@aircraft.DeliveryComplete</td>
+                                    <td style="display:none" >@aircraft.AircraftId</td>
+                                    <td style="display:none">@aircraft.SeatingCapacity</td>
+
 
                                     <td>
                                         <button type="button" id="update" class="btn btn-outline-success d-flex align-items-center editBtn" data-id="@aircraft.ManufacturingStatusId">
@@ -326,9 +332,10 @@
                                         "AdditionalDetails": columns.eq(25).text(),
                                         "AirportCity": columns.eq(26).text(),
                                         "DeliveryComplete": columns.eq(27).text(),
+                                        "AircraftId": columns.eq(28).text(),
+                                        "SeatingCapacity": columns.eq(29).text(),
 
-
-
+                                        
                                         // Add more properties if needed following the same pattern
                                     };
 
@@ -388,7 +395,10 @@
                                     $('#AdditionalDetails').val(columns.eq(25).text());
                                     $('#AirportCity').val(columns.eq(26).text());
                                     $('#DeliveryComplete').val(columns.eq(27).text());
+                                    $('#AircraftId').val(columns.eq(28).text());
+                                    $('#SeatingCapacity').val(columns.eq(29).text());
 
+                                    
                                     return false; // Break out of the loop since the desired row is found
                                 }
                             });

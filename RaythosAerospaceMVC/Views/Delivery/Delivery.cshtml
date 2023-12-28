@@ -39,6 +39,8 @@
                         <input asp-for="ModelName" id="ModelName" placeholder="Aircraft Name" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.ModelName ?? "")" readonly />
                         <input asp-for="ManufacturingStatusId" id="ManufacturingStatusId" placeholder="ManufacturingStatusId" name="ManufacturingStatusId" class="form-control @(ViewData.ModelState.ContainsKey("ManufacturingStatusId") && ViewData.ModelState["ManufacturingStatusId"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ManufacturingStatusId.ToString() ?? "")" style="display:none" />
                         <input asp-for="DeliveryId" id="DeliveryId" placeholder="DeliveryId" name="DeliveryId" class="form-control @(ViewData.ModelState.ContainsKey("DeliveryId") && ViewData.ModelState["DeliveryId"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.DeliveryId.ToString() ?? "")" style="display:none" />
+                        <input asp-for="AircraftId" id="AircraftId" placeholder="AircraftId" name="AircraftId" class="form-control @(ViewData.ModelState.ContainsKey("AircraftId") && ViewData.ModelState["AircraftId"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.AircraftId.ToString() ?? "")" style="display:none" />
+
                         <span asp-validation-for="ModelName" class="text-danger"></span>
                     </div>
                 </div>
@@ -574,7 +576,7 @@
                             WarrentyYears: $('#WarrentyYears').val(),
                             DeliveryComplete: "Yes",
                             DeliveryId: $('#DeliveryId').val(),
-
+                            AircraftId: $('#AircraftId').val(),
                             // Get other field values in a similar way
                         };
 

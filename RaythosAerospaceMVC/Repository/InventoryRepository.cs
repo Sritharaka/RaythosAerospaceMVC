@@ -34,27 +34,36 @@ namespace RaythosAerospaceMVC.Repository
         {
             var existingInventory = await _context.Inventory.FindAsync(inventory.InventoryId);
 
-            if (existingInventory == null)
+            if (existingInventory != null)
             {
-                throw new InvalidOperationException("Inventory not found");
+
+                // Update existing Delivery
+                existingInventory.InventorySeats = inventory.InventorySeats;
+                existingInventory.InventoryEngines = inventory.InventoryEngines;
+                existingInventory.InventoryAircraftBody = inventory.InventoryAircraftBody;
+                existingInventory.InventoryAirframes = inventory.InventoryAirframes;
+                existingInventory.InventoryAvionicsSystems = inventory.InventoryAvionicsSystems;
+                existingInventory.InventoryFuelTanks = inventory.InventoryFuelTanks;
+                existingInventory.InventoryDescription = inventory.InventoryDescription;
+
+                existingInventory.UpdatedDate = DateTime.Now;
+
+                // Update other properties as needed
+                await _context.SaveChangesAsync();
             }
 
-            // Update properties of existingInventory with new values from inventory
-            existingInventory.ModelName = inventory.ModelName;
-            existingInventory.Manufacturer = inventory.Manufacturer;
-            existingInventory.Description = inventory.Description;
-            existingInventory.SeatingType = inventory.SeatingType;
-            existingInventory.InteriorDesign = inventory.InteriorDesign;
-            existingInventory.ImageUrl = inventory.ImageUrl;
-            existingInventory.BasePrice = inventory.BasePrice;
-            existingInventory.EngineType = inventory.EngineType;
-            existingInventory.MaximumSpeed = inventory.MaximumSpeed;
-            existingInventory.SeatingCapacity = inventory.SeatingCapacity;
-            existingInventory.FuelCapacity = inventory.FuelCapacity;
-            existingInventory.Weight = inventory.Weight;
-            existingInventory.UpdatedDate = inventory.UpdatedDate;
+            var Aircraft = await _context.Aircrafts.FindAsync(inventory.AircraftId);
 
-            await _context.SaveChangesAsync();
+            if (Aircraft != null)
+            {
+
+                // Update existing Delivery
+                Aircraft.InventoryEngines = inventory.InventoryEngines;
+                Aircraft.UpdatedDate = DateTime.Now;
+
+                // Update other properties as needed
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteInventoryAsync(int inventoryId)
@@ -73,5 +82,6 @@ namespace RaythosAerospaceMVC.Repository
             // ...
             return null;
         }
+
     }
 }

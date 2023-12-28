@@ -87,7 +87,8 @@ namespace RaythosAerospaceMVC.Repositories
                     ManufacturingStatusId = progress.ManufacturingStatusId,
                     CardHolderName = progress.CardHolderName,
                     ModelName = progress.ModelName,
-
+                    AircraftId = progress.AircraftId,
+                    SeatingCapacity = progress.SeatingCapacity,
 
 
                 };
@@ -112,6 +113,10 @@ namespace RaythosAerospaceMVC.Repositories
                 existingDelivery.OverallProgress = progress.OverallProgress;
                 existingDelivery.DeliveryDate = progress.DeliveryDate;
                 existingDelivery.ManufacturingComplete = progress.ManufacturingComplete;
+                existingDelivery.AircraftId = progress.AircraftId;
+                existingDelivery.SeatingCapacity = progress.SeatingCapacity;
+
+
 
                 await _context.SaveChangesAsync();
 

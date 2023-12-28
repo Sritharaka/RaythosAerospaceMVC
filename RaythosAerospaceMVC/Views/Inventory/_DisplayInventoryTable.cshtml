@@ -92,8 +92,18 @@
                                 <th>Created Date</th>
                                 <th>Description</th>
                                 <th>ImageUrl</th>
+                                <th>Inventory Seats</th>
+                                <th>Inventory Engines</th>
+                                <th>Inventory Aircraft Body</th>
+                                <th>Inventory Airframes</th>
+                                <th>Inventory AvionicsSystems</th>
+                                <th>Inventory FuelTanks</th>
+                                <th>Inventory Description</th>
+                                <th style="display:none">Manufacturing Complete</th>
+                                <th style="display:none">AircraftId</th>
                                 <th>Update</th>
                                 <th>Delete</th>
+                              
                                 <!-- Add more table headers for other fields if needed -->
                             </tr>
                         </thead>
@@ -115,6 +125,15 @@
                                     <td>@aircraft.CreatedDate</td>
                                     <td>@aircraft.Description</td>
                                     <td>@aircraft.ImageUrl</td>
+                                    <td>@aircraft.InventorySeats</td>
+                                    <td>@aircraft.InventoryEngines</td>
+                                    <td>@aircraft.InventoryAircraftBody</td>
+                                    <td>@aircraft.InventoryAirframes</td>
+                                    <td>@aircraft.InventoryAvionicsSystems</td>
+                                    <td>@aircraft.InventoryFuelTanks</td>
+                                    <td>@aircraft.InventoryDescription</td>
+                                    <td style="display:none">@aircraft.ManufacturingComplete</td>
+                                    <td style="display:none">@aircraft.AircraftId</td>
                                     <td>
                                         <button type="button" id="update" class="btn btn-outline-success d-flex align-items-center editBtn" data-id="@aircraft.InventoryId">
                                             <i class="bi bi-pencil me-2"></i>
@@ -280,7 +299,17 @@
                                         "Weight": columns.eq(10).text(),
                                         "CreatedDate": columns.eq(11).text(),
                                         "Description": columns.eq(12).text(),
-                                        "ImageUrl": columns.eq(13).text()
+                                        "ImageUrl": columns.eq(13).text(),
+                                        "InventorySeats": columns.eq(14).text(),
+                                        "InventoryEngines": columns.eq(15).text(),
+                                        "InventoryAircraftBody": columns.eq(16).text(),
+                                        "InventoryAirframes": columns.eq(17).text(),
+                                        "InventoryAvionicsSystems": columns.eq(18).text(),
+                                        "InventoryFuelTanks": columns.eq(19).text(),
+                                        "InventoryDescription": columns.eq(20).text(),
+                                        "ManufacturingComplete": columns.eq(21).text(),
+                                        "AircraftId": columns.eq(22).text(),
+
                                         // Add more properties if needed following the same pattern
                                     };
 
@@ -298,6 +327,17 @@
                                     $('#ImageUrl').attr('src', columns.eq(13).text());
                                     $('#Id').val(columns.eq(0).text());
                                     $('#CreatedDate').val(columns.eq(11).text());
+                                    $('#InventorySeats').val(columns.eq(14).text());
+                                    $('#InventoryEngines').val(columns.eq(15).text());
+                                    $('#InventoryAircraftBody').val(columns.eq(16).text());
+                                    $('#InventoryAirframes').val(columns.eq(17).text());
+                                    $('#InventoryAvionicsSystems').val(columns.eq(18).text());
+                                    $('#InventoryFuelTanks').val(columns.eq(19).text());
+                                    $('#InventoryDescription').val(columns.eq(20).text());
+                                    $('#ManufacturingComplete').val(columns.eq(21).text());
+                                    $('#AircraftId').val(columns.eq(22).text());
+
+                                    
 
                                     return false; // Break out of the loop since the desired row is found
                                 }
@@ -368,7 +408,7 @@
                                 // User clicked Yes, perform the update action
 
                                 $.ajax({
-                                    url: '/Aircraft/Delete/' + aircraftId, // Replace with your endpoint for deleting aircraft
+                                    url: '/Inventory/Delete/' + aircraftId, // Replace with your endpoint for deleting aircraft
                                     type: 'POST', // or 'DELETE' if your API supports DELETE requests
                                     headers: {
                                         RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()

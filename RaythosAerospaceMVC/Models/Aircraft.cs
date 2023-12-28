@@ -25,6 +25,10 @@ namespace RaythosAerospaceMVC.Models
         [NotMapped]
         public IFormFile? uploadedImage { get; set; }
 
+        public decimal? InventoryEngines { get; set; }
+
+        
+
 
     }
 }

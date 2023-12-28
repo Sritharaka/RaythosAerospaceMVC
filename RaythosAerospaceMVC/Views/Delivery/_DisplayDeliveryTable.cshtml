@@ -110,6 +110,9 @@
                                 <th>Warrenty Years</th>
                                 <th>Delivery Complete</th>
                                 <th style="display:none">Manufacturing StatusId</th>
+                                <th style="display:none">AircraftId</th>
+
+                                
                                 <th>Update</th>
                                 <th>Delete</th>
                                                             <!-- Add more table headers for other fields if needed -->
@@ -151,15 +154,16 @@
                                     <td>@aircraft.WarrentyYears</td>
                                     <td>@aircraft.DeliveryComplete</td>
                                     <td style="display:none">@aircraft.ManufacturingStatusId</td>
+                                    <td style="display:none">@aircraft.AircraftId</td>
 
                                     <td>
-                                        <button type="button" id="update" class="btn btn-outline-success d-flex align-items-center editBtn" data-id="@aircraft.ManufacturingStatusId">
+                                        <button type="button" id="update" class="btn btn-outline-success d-flex align-items-center editBtn" data-id="@aircraft.DeliveryId">
                                             <i class="bi bi-pencil me-2"></i>
                                             <span>Update</span>
                                         </button>
                                     </td>
                                      <td>
-                            <button type="button" id="delete" class="btn btn-outline-danger d-flex align-items-center deleteBtn" data-id="@aircraft.ManufacturingStatusId">
+                                        <button type="button" id="delete" class="btn btn-outline-danger d-flex align-items-center deleteBtn" data-id="@aircraft.DeliveryId">
                             <i class="bi bi-trash me-2"></i>
                             <span>Delete</span>
                             </button>
@@ -327,6 +331,8 @@
                                         "WarrentyYears": columns.eq(20).text(),
                                         "DeliveryComplete": columns.eq(21).text(),
                                         "ManufacturingStatusId": columns.eq(22).text(),
+                                        "AircraftId": columns.eq(23).text(),
+
                                         //"DeliveryCompleteDescription": columns.eq(28).text(),
                                         //"WarrentyYears": columns.eq(29).text(),
                                         //"DeliveryComplete": columns.eq(30).text(),
@@ -401,7 +407,9 @@
                                     $('#WarrentyYears').val(columns.eq(20).text());
                                     $('#DeliveryComplete').val(columns.eq(21).text());
                                     $('#ManufacturingStatusId').val(columns.eq(22).text());
+                                    $('#AircraftId').val(columns.eq(23).text());
 
+                                    
                                     
 
                                     return false; // Break out of the loop since the desired row is found

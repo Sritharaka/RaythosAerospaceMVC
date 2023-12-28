@@ -43,6 +43,8 @@ namespace RaythosAerospaceMVC.Models
         public string? WarrentyYears { get; set; }
         public DateTime? DeliveryCompleteDate { get; set; }
         public string? DeliveryCompleteDescription { get; set; }
+        public int? AircraftId { get; set; }
+        
 
 
 

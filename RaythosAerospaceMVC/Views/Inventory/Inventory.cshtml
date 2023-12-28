@@ -37,6 +37,7 @@
                     <div class="form-group">
                         <label asp-for="ModelName">Aircraft Name</label>
                         <input asp-for="ModelName" id="ModelName" placeholder="Aircraft Name" name="ModelName" class="form-control @(ViewData.ModelState.ContainsKey("ModelName") && ViewData.ModelState["ModelName"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.ModelName ?? "")" readonly />
+                        <input asp-for="AircraftId" id="AircraftId" placeholder="Aircraft Id" name="AircraftId" class="form-control @(ViewData.ModelState.ContainsKey("AircraftId") && ViewData.ModelState["AircraftId"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.AircraftId.ToString() ?? "")" readonly style="display:none" />
                         <span asp-validation-for="ModelName" class="text-danger"></span>
                     </div>
                 </div>
@@ -68,7 +69,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label asp-for="MaximumSpeed">Maximum Speed (km/h)</label>
-                        <input asp-for="MaximumSpeed" placeholder="Maximum Speed" id="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" required readonly />
+                        <input asp-for="MaximumSpeed" placeholder="Maximum Speed" id="MaximumSpeed" name="MaximumSpeed" class="form-control @(ViewData.ModelState.ContainsKey("MaximumSpeed") && ViewData.ModelState["MaximumSpeed"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.MaximumSpeed.ToString() ?? "")" required readonly />
                         <span asp-validation-for="MaximumSpeed" class="text-danger"></span>
                     </div>
                 </div>
@@ -80,7 +81,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label asp-for="SeatingType">Seating Type</label>
-                        <input asp-for="SeatingType" placeholder="Seating Type" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" required readonly />
+                        <input asp-for="SeatingType" placeholder="Seating Type" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.SeatingType ?? "")" required readonly />
                         <span asp-validation-for="SeatingType" class="text-danger"></span>
                     </div>
                 </div>
@@ -96,7 +97,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label asp-for="SeatingCapacity">Seating Capacity</label>
-                        <input asp-for="SeatingCapacity" placeholder="Seating Capacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required readonly />
+                        <input asp-for="SeatingCapacity" id="SeatingCapacity" name="SeatingCapacity" placeholder="Seating Capacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" value="@(Model?.SeatingCapacity.ToString() ?? "")" required readonly />
                         <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
                     </div>
                 </div>
@@ -158,12 +159,12 @@
 
             <div class="form-group">
                 <label asp-for="InventoryDescription" >Inventory Description</label>
-                <textarea asp-for="InventoryDescription" placeholder="Additional Details" class="form-control @(ViewData.ModelState.ContainsKey("InventoryDescription") && ViewData.ModelState["InventoryDescription"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
+                <textarea asp-for="InventoryDescription" id="InventoryDescription" name="InventoryDescription" placeholder="Additional Details" class="form-control @(ViewData.ModelState.ContainsKey("InventoryDescription") && ViewData.ModelState["InventoryDescription"].Errors.Count > 0 ? "border border-danger" : "")" required></textarea>
                 <span asp-validation-for="InventoryDescription" class="text-danger"></span>
             </div>
 
 
-            <div class="row">
+       @*     <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label asp-for="InteriorDesign" style="display:none">Interior Design</label>
@@ -182,15 +183,15 @@
 
 
             </div>
-
-            <div class="row">
-            @*    <div class="col-lg-6">
+*@
+@*            <div class="row">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label asp-for="SeatingCapacity">Seating Capacity</label>
                         <input asp-for="SeatingCapacity" class="form-control @(ViewData.ModelState.ContainsKey("SeatingCapacity") && ViewData.ModelState["SeatingCapacity"].Errors.Count > 0 ? "border border-danger" : "")" required readonly />
                         <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
                     </div>
-                </div>*@
+                </div>
 
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -201,7 +202,7 @@
                 </div>
 
 
-            </div>
+            </div>*@
 
 
  @*           <div class="form-group">
@@ -282,8 +283,7 @@
 
             // Array of field IDs to validate
             var fieldIds = [
-                'ModelName', 'Manufacturer', 'BasePrice', 'MaximumSpeed', 'SeatingType', 'EngineType',
-                'InteriorDesign', 'FuelCapacity', 'SeatingCapacity', 'Weight', 'Description'
+                'InventorySeats', 'InventoryEngines', 'InventoryAircraftBody', 'InventoryAirframes', 'InventoryAvionicsSystems', 'InventoryFuelTanks', 'InventoryDescription', 'AircraftId'
                 // Add other field IDs to be validated
             ];
 
@@ -319,8 +319,7 @@
         $(document).ready(function () {
             // Array of field IDs to validate on blur
             var fieldIds = [
-                'ModelName', 'Manufacturer', 'BasePrice', 'MaximumSpeed', 'SeatingType', 'EngineType',
-                'InteriorDesign', 'FuelCapacity', 'SeatingCapacity', 'Weight', 'Description'
+                'InventorySeats', 'InventoryEngines', 'InventoryAircraftBody', 'InventoryAirframes', 'InventoryAvionicsSystems', 'InventoryFuelTanks', 'InventoryDescription', 'AircraftId'
                 // Add other field IDs to be validated on blur
             ];
 
@@ -365,12 +364,12 @@
         //        }
         //    });
         //}
-        var aircraftId = null;
+        var inventoryId = null;
         //// Click event for the Update button
         $(document).on('click', '.editBtn', function () {
-            aircraftId = $(this).data('id');
+            inventoryId = $(this).data('id');
             //updateAircraft(aircraftId); // Call the function passing the aircraftId
-
+            //inventoryId = $('#Id').val()
         });
 
         $(document).ready(function () {
@@ -382,20 +381,28 @@
                     var aircraftData = {
                         ModelName: $('#ModelName').val(),
                         Manufacturer: $('#Manufacturer').val(),
-                        Description: $('#Description').val(),
+                        AircraftId: $('#AircraftId').val(),
                         SeatingType: $('#SeatingType').val(),
-                        InteriorDesign: $('#InteriorDesign').val(),
-                        uploadedImage: $('#uploadedImage').val(),
-                        BasePrice: $('#BasePrice').val(),
+                        //InteriorDesign: $('#InteriorDesign').val(),
+                        //uploadedImage: $('#uploadedImage').val(),
+                        //BasePrice: $('#BasePrice').val(),
                         EngineType: $('#EngineType').val(),
                         MaximumSpeed: $('#MaximumSpeed').val(),
                         SeatingCapacity: $('#SeatingCapacity').val(),
-                        FuelCapacity: $('#FuelCapacity').val(),
-                        Weight: $('#Weight').val(),
-                        ImageUrl: $('#ImageUrl').val(),
+                        //FuelCapacity: $('#FuelCapacity').val(),
+                        //Weight: $('#Weight').val(),
+                        //ImageUrl: $('#ImageUrl').val(),
                         //ImageUrl: $('#ImageUrl').val(),
                         //CreatedDate: $('#CreatedDate').val(),
-                        Id: aircraftId
+                        InventoryId: inventoryId,
+                        InventorySeats: $('#InventorySeats').val(),
+                        InventoryEngines: $('#InventoryEngines').val(),
+                        InventoryAircraftBody: $('#InventoryAircraftBody').val(),
+                        InventoryAirframes: $('#InventoryAirframes').val(),
+                        InventoryAvionicsSystems: $('#InventoryAvionicsSystems').val(),
+                        InventoryFuelTanks: $('#InventoryFuelTanks').val(),
+                        ManufacturingComplete: $('#ManufacturingComplete').val(),
+                        InventoryDescription: $('#InventoryDescription').val(),
 
 
 
@@ -404,10 +411,10 @@
 
 
                     //var aircraftId = $('#Id').val();
-                    console.log(aircraftId)
+                    console.log(inventoryId)
                     // Perform update action with the constructed aircraftData object
                     // You can make an AJAX request or call a function to update the data here
-                    updateAircraftData(aircraftData, aircraftId);
+                    updateAircraftData(aircraftData, inventoryId);
                 } else {
                     // Fields are not valid, display an error message or perform necessary action
                     alert('Please fill all required fields with valid data.');
@@ -521,7 +528,7 @@
             function updateAircraftData(data, aircraftId) {
                 // Perform the update action here using the 'data' object
                 // For example, make an AJAX request to update the data on the server
-                var Url = '/Aircraft/Edit/' + aircraftId;
+                var Url = '/Inventory/Edit/' + aircraftId;
 
                 var formData = new FormData();
 
@@ -531,10 +538,10 @@
                 }
 
                 // Append file (IFormFile) to FormData
-                var fileInput = document.getElementById('uploadedImage'); // Replace 'uploadedImage' with your file input's ID
-                var file = fileInput.files[0]; // Get the first file from the input
+                //var fileInput = document.getElementById('uploadedImage'); // Replace 'uploadedImage' with your file input's ID
+                //var file = fileInput.files[0]; // Get the first file from the input
 
-                formData.append('uploadedImage', file);
+                //formData.append('uploadedImage', file);
 
                 $.ajax({
                     url: Url, // Replace with your endpoint for updating aircraft

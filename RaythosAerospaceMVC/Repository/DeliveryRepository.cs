@@ -66,7 +66,54 @@ namespace RaythosAerospaceMVC.Repositories
             }
 
 
+            //var InventoryItems = await _context.Inventory.Where(Inventorys => Inventorys.AircraftId == progress.AircraftId).ToListAsync();
+            var InventoryItems = await _context.Inventory
+             .FirstOrDefaultAsync(Inventorys => Inventorys.AircraftId == progress.AircraftId);
+
+
+            var stockReducedSeatingCapacity = existingDelivery.SeatingCapacity;
+            var stockReducedEngines = 2;
+            var stockReducedAircraftBody = 1;
+            var stockReducedAirframes = 2;
+            var stockReducedAvionicsSystems = 2;
+            var stockReducedFuelTanks = 2;
+
+
+            if (InventoryItems != null)
+            {
+
+                // Update existing Delivery
+                InventoryItems.InventorySeats = InventoryItems.InventorySeats - stockReducedSeatingCapacity;
+                InventoryItems.InventoryEngines = InventoryItems.InventoryEngines - stockReducedEngines;
+                InventoryItems.InventoryAircraftBody = InventoryItems.InventoryAircraftBody - stockReducedAircraftBody;
+                InventoryItems.InventoryAirframes = InventoryItems.InventoryAirframes - stockReducedAirframes;
+                InventoryItems.InventoryAvionicsSystems = InventoryItems.InventoryAvionicsSystems - stockReducedAvionicsSystems;
+                InventoryItems.InventoryFuelTanks = InventoryItems.InventoryFuelTanks - stockReducedFuelTanks;
+
+                InventoryItems.UpdatedDate = DateTime.Now;
+
+                // Update other properties as needed
+                await _context.SaveChangesAsync();
+            }
+
+            var AircraftItems = await _context.Aircrafts.FindAsync(progress.AircraftId);
+
+            if (AircraftItems != null && InventoryItems != null)
+            {
+
+                // Update existing Delivery
+                AircraftItems.InventoryEngines = AircraftItems.InventoryEngines - stockReducedEngines;
+                AircraftItems.UpdatedDate = DateTime.Now;
+
+                // Update other properties as needed
+                await _context.SaveChangesAsync();
+            }
+
+
+
+
             await SendContactEmail(progress);
+
         }
 
         private async Task SendContactEmail(Delivery Delivery)
