@@ -210,6 +210,20 @@ namespace RaythosAerospaceMVC.Repository
                 throw new ApplicationException("Error occurred while uploading the image.", ex);
             }
         }
+
+        public async Task<IQueryable<Aircraft>> GetAircraftsByDateRange(DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate == null || toDate == null)
+            {
+                // Handle null values appropriately
+                return Enumerable.Empty<Aircraft>().AsQueryable();
+            }
+
+            return _context.Aircrafts
+                .Where(aircraft => aircraft.CreatedDate >= fromDate && aircraft.CreatedDate <= toDate);
+        }
+
+
     }
 
 

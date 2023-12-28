@@ -11,5 +11,8 @@ namespace RaythosAerospaceMVC.Repository
         Task DeleteAircraftAsync(int aircraftId);
         Task<string> UploadImage(IFormFile imageFile);
 
+        Task<IQueryable<Aircraft>> GetAircraftsByDateRange(DateTime? fromDate, DateTime? toDate);
+
+
     }
 }

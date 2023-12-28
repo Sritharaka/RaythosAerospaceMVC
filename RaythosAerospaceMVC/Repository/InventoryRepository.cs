@@ -83,5 +83,17 @@ namespace RaythosAerospaceMVC.Repository
             return null;
         }
 
+        public async Task<IQueryable<Inventory>> GetInventoriesByDateRange(DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate == null || toDate == null)
+            {
+                // Handle null values appropriately
+                return Enumerable.Empty<Inventory>().AsQueryable();
+            }
+
+            return _context.Inventory
+                .Where(inventory => inventory.CreatedDate >= fromDate && inventory.CreatedDate <= toDate);
+        }
+
     }
 }

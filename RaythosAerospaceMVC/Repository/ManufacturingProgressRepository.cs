@@ -104,5 +104,21 @@ namespace RaythosAerospaceMVC.Repositories
             _context.ManufacturingProgresses.Remove(progress);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IQueryable<ManufacturingProgress>> GetProgressesByDateRange(DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate == null || toDate == null)
+            {
+                // Handle the case where either fromDate or toDate is null
+                // For example, you could throw an exception, return an empty collection, or handle it based on your application's logic
+                // Here's an example of returning an empty IQueryable:
+                return Enumerable.Empty<ManufacturingProgress>().AsQueryable();
+            }
+
+            // Perform the query with non-null fromDate and toDate
+            return _context.ManufacturingProgresses
+                .Where(mp => mp.CreatedDate >= fromDate && mp.CreatedDate <= toDate);
+        }
+
     }
 }

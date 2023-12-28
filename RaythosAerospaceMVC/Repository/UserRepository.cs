@@ -354,5 +354,17 @@ namespace RaythosAerospaceMVC.Repository
 
         }
 
+        public async Task<IQueryable<User>> GetUsersByDateRange(DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate == null || toDate == null)
+            {
+                // Handle null values appropriately
+                return Enumerable.Empty<User>().AsQueryable();
+            }
+
+            return _context.Users
+                .Where(user => user.CreateDate >= fromDate && user.CreateDate <= toDate);
+        }
+
     }
 }

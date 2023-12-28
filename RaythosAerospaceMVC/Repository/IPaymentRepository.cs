@@ -11,5 +11,7 @@ namespace RaythosAerospaceMVC.Repository
         Task<Payment> UpdatePayment(Payment payment);
         Task DeletePayment(int id);
         //Task<string> GetCustomerName(string customerId);
+        Task<IQueryable<Payment>> GetPaymentsByDateRange(DateTime? fromDate, DateTime? toDate);
+
     }
 }

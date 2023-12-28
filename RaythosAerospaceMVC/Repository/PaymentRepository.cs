@@ -266,5 +266,18 @@ namespace RaythosAerospaceMVC.Repository
         }
 
         // Implement other methods for payment-related operations
+
+        public async Task<IQueryable<Payment>> GetPaymentsByDateRange(DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate == null || toDate == null)
+            {
+                // If fromDate or toDate is null, return all payments
+                return _context.Payments.AsQueryable();
+            }
+
+            // Filter payments based on the specified date range
+            return _context.Payments.Where(p => p.CreatedDate >= fromDate && p.CreatedDate <= toDate).AsQueryable();
+        }
+
     }
 }

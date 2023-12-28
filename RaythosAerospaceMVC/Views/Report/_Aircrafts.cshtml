@@ -1,0 +1,109 @@
+﻿<!-- _Payments.cshtml -->
+@*@model IEnumerable<Aircraft>
+*@
+@model IEnumerable<RaythosAerospaceMVC.Models.Aircraft>
+
+@if (Model != null)
+{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <!-- Add your meta tags, title, and other external styles and scripts here -->
+
+        <style>
+            /* Add your existing CSS styles here */
+            /* ... */
+
+            /* Table-specific styles */
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f2f2f2;
+                color: #333;
+            }
+
+            tr:hover {
+                background-color: #f5f5f5;
+            }
+        </style>
+
+        <!-- Toastr and jQuery scripts -->
+        <!-- ... -->
+    </head>
+    <body>
+
+        <div style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+
+            <div class="container mt-4">
+                <h5 class="mb-4" style="margin-bottom:20px; margin-top:20px;">Aircraft Report</h5>
+
+                <!-- Table to display Aircraft data -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Model Name</th>
+                                <th>Manufacturer</th>
+                                <th>Description</th>
+                                <th>Seating Type</th>
+                                <th>Interior Design</th>
+                                <th>Additional Features</th>
+                                <th>Image URL</th>
+                                <th>Base Price</th>
+                                <th>Engine Type</th>
+                                <th>Maximum Speed</th>
+                                <th>Fuel Capacity</th>
+                                <th>Seating Capacity</th>
+                                <th>Weight</th>
+                                <th>Created Date</th>
+                                <th>Updated Date</th>
+                                <th>Deleted Date</th>
+                                <!-- Include other headers based on your requirements -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var aircraft in Model)
+                            {
+                                <tr>
+                                    <td>@aircraft.Id</td>
+                                    <td>@aircraft.ModelName</td>
+                                    <td>@aircraft.Manufacturer</td>
+                                    <td>@aircraft.Description</td>
+                                    <td>@aircraft.SeatingType</td>
+                                    <td>@aircraft.InteriorDesign</td>
+                                    <td>@aircraft.AdditionalFeatures</td>
+                                    <td>@aircraft.ImageUrl</td>
+                                    <td>@aircraft.BasePrice</td>
+                                    <td>@aircraft.EngineType</td>
+                                    <td>@aircraft.MaximumSpeed</td>
+                                    <td>@aircraft.FuelCapacity</td>
+                                    <td>@aircraft.SeatingCapacity</td>
+                                    <td>@aircraft.Weight</td>
+                                    <td>@aircraft.CreatedDate</td>
+                                    <td>@aircraft.UpdatedDate</td>
+                                    <td>@aircraft.DeletedDate</td>
+                                    <!-- Include other columns with respective properties -->
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your existing popup container and other HTML content -->
+        <!-- ... -->
+
+    </body>
+    </html>
+}

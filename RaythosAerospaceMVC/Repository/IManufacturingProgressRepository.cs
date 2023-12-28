@@ -11,5 +11,8 @@ namespace RaythosAerospaceMVC.Repositories
         Task AddAsync(ManufacturingProgress progress);
         Task UpdateAsync(ManufacturingProgress progress);
         Task DeleteAsync(ManufacturingProgress progress);
+
+        Task<IQueryable<ManufacturingProgress>> GetProgressesByDateRange(DateTime? fromDate, DateTime? toDate);
+
     }
 }

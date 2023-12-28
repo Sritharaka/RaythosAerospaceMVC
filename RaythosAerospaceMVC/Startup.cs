@@ -9,6 +9,9 @@ using RaythosAerospaceMVC.Models;
 using RaythosAerospaceMVC.Repository;
 using System.Net.Mail;
 using RaythosAerospaceMVC.Repositories;
+using Rotativa.AspNetCore; // Add this using directive
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace RaythosAerospaceMVC
 {
@@ -19,6 +22,7 @@ namespace RaythosAerospaceMVC
         {
             Configuration = configuration;
         }
+
 
         public IConfiguration Configuration { get; }
 
@@ -48,9 +52,12 @@ namespace RaythosAerospaceMVC
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
 
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
+
             services.AddScoped<SmtpClient>();
 
-
+    
 
 
             // Other service configurations

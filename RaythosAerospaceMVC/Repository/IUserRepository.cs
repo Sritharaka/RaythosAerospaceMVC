@@ -17,6 +17,9 @@ namespace RaythosAerospaceMVC.Repository
 
         Task DeleteUserAsync(int id);
 
+        Task<IQueryable<User>> GetUsersByDateRange(DateTime? fromDate, DateTime? toDate);
+
+
 
     }
 }

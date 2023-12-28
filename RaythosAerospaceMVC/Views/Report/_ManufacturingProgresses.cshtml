@@ -1,0 +1,125 @@
+﻿<!-- _Payments.cshtml -->
+@model IEnumerable<ManufacturingProgress>
+
+@if (Model != null)
+{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <!-- Add your meta tags, title, and other external styles and scripts here -->
+
+        <style>
+            /* Add your existing CSS styles here */
+            /* ... */
+
+            /* Table-specific styles */
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f2f2f2;
+                color: #333;
+            }
+
+            tr:hover {
+                background-color: #f5f5f5;
+            }
+        </style>
+
+        <!-- Toastr and jQuery scripts -->
+        <!-- ... -->
+    </head>
+    <body>
+
+        <div style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+
+            <div class="container mt-4">
+                <h5 class="mb-4" style="margin-bottom:20px; margin-top:20px;">Manufacturing Progress Report</h5>
+
+                <!-- Table to display Manufacturing Progress data -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Manufacturing Status ID</th>
+                                <th>Status</th>
+                                <th>Airframe Progress</th>
+                                <th>Avionics Systems Progress</th>
+                                <th>Engines Progress</th>
+                                <th>Interior Progress</th>
+                                <th>Overall Progress</th>
+                                <th>Manufacturing Complete</th>
+                                <th>Description</th>
+                                <th>Delivery Date</th>
+                                <!-- Add other Manufacturing Progress attributes here -->
+                                <th>Model Name</th>
+                                <th>Manufacturer</th>
+                                <th>Seating Type</th>
+                                <th>Interior Design</th>
+                                <th>Additional Features</th>
+                                <th>Image URL</th>
+                                <th>Base Price</th>
+                                <th>Engine Type</th>
+                                <th>Maximum Speed</th>
+                                <th>Fuel Capacity</th>
+                                <th>Seating Capacity</th>
+                                <th>Weight</th>
+                                <th>Created Date</th>
+                                <th>Updated Date</th>
+                                <th>Deleted Date</th>
+                                <!-- Add other attributes -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ManufacturingStatusId</td>
+                                    <td>@item.Status</td>
+                                    <td>@item.AirframeProgress</td>
+                                    <td>@item.AvionicsSystemsProgress</td>
+                                    <td>@item.EnginesProgress</td>
+                                    <td>@item.InteriorProgress</td>
+                                    <td>@item.OverallProgress</td>
+                                    <td>@item.ManufacturingComplete</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.DeliveryDate</td>
+                                    <!-- Display other Manufacturing Progress attributes -->
+                                    <td>@item.ModelName</td>
+                                    <td>@item.Manufacturer</td>
+                                    <td>@item.SeatingType</td>
+                                    <td>@item.InteriorDesign</td>
+                                    <td>@item.AdditionalFeatures</td>
+                                    <td>@item.ImageUrl</td>
+                                    <td>@item.BasePrice</td>
+                                    <td>@item.EngineType</td>
+                                    <td>@item.MaximumSpeed</td>
+                                    <td>@item.FuelCapacity</td>
+                                    <td>@item.SeatingCapacity</td>
+                                    <td>@item.Weight</td>
+                                    <td>@item.CreatedDate</td>
+                                    <td>@item.UpdatedDate</td>
+                                    <td>@item.DeletedDate</td>
+                                    <!-- Display other attributes -->
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your existing popup container and other HTML content -->
+        <!-- ... -->
+
+    </body>
+    </html>
+}

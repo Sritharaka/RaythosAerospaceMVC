@@ -1,0 +1,130 @@
+﻿<!-- _Payments.cshtml -->
+@model IEnumerable<Payment>
+
+@if (Model != null)
+{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <!-- Add your meta tags, title, and other external styles and scripts here -->
+
+        <style>
+            /* Add your existing CSS styles here */
+            /* ... */
+
+            /* Table-specific styles */
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f2f2f2;
+                color: #333;
+            }
+
+            tr:hover {
+                background-color: #f5f5f5;
+            }
+        </style>
+
+        <!-- Toastr and jQuery scripts -->
+        <!-- ... -->
+    </head>
+    <body>
+
+        <div style="margin-left: 40px; margin-top: 40px; width: 1150px;">
+
+            <div class="container mt-4">
+                <h5 class="mb-4" style="margin-bottom:20px; margin-top:20px;">Payment Report</h5>
+
+                <!-- Table to display Payment and Inventory data -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <!-- Payment Attributes -->
+                                <th>Payment ID</th>
+                                <th>User ID</th>
+                                <th>Card Number</th>
+                                <th>Expiry Date</th>
+                                <th>CVV</th>
+                                <th>Card Holder Name</th>
+                                <th>Telephone</th>
+                                <th>Email Address</th>
+
+                                <!-- Inventory Attributes -->
+@*                                <th>Inventory ID</th>
+*@                                <th>Aircraft ID</th>
+                                <th>Model Name</th>
+                                <th>Manufacturer</th>
+                                <th>Description</th>
+                                <th>Seating Type</th>
+                                <th>Interior Design</th>
+                                <th>Additional Features</th>
+                                <th>Image URL</th>
+                                <th>Base Price</th>
+                                <th>Engine Type</th>
+                                <th>Maximum Speed</th>
+                                <th>Fuel Capacity</th>
+                                <th>Seating Capacity</th>
+                                <th>Weight</th>
+                                <th>Created Date</th>
+                                <th>Updated Date</th>
+                                <th>Deleted Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <!-- Payment Data -->
+                                    <td>@item.Id</td>
+                                    <td>@item.UserId</td>
+                                    <td>@item.CardNumber</td>
+                                    <td>@item.ExpiryDate</td>
+                                    <td>@item.CVV</td>
+                                    <td>@item.CardHolderName</td>
+                                    <td>@item.Telephone</td>
+                                    <td>@item.EmailAddress</td>
+
+                                    <!-- Inventory Data -->
+@*                                    <td>@item.InventoryId</td>
+*@                                    <td>@item.AircraftId</td>
+                                    <td>@item.ModelName</td>
+                                    <td>@item.Manufacturer</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.SeatingType</td>
+                                    <td>@item.InteriorDesign</td>
+                                    <td>@item.AdditionalFeatures</td>
+                                    <td>@item.ImageUrl</td>
+                                    <td>@item.BasePrice</td>
+                                    <td>@item.EngineType</td>
+                                    <td>@item.MaximumSpeed</td>
+                                    <td>@item.FuelCapacity</td>
+                                    <td>@item.SeatingCapacity</td>
+                                    <td>@item.Weight</td>
+                                    <td>@item.CreatedDate</td>
+                                    <td>@item.UpdatedDate</td>
+                                    <td>@item.DeletedDate</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your existing popup container and other HTML content -->
+        <!-- ... -->
+
+    </body>
+    </html>
+}
+

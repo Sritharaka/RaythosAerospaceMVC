@@ -10,6 +10,8 @@ namespace RaythosAerospaceMVC.Repository
         Task UpdateInventoryAsync(Inventory inventory);
         Task DeleteInventoryAsync(int inventoryId);
         Task<string> UploadImage(IFormFile imageFile);
+        Task<IQueryable<Inventory>> GetInventoriesByDateRange(DateTime? fromDate, DateTime? toDate);
+
 
 
     }
