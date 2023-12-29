@@ -145,6 +145,25 @@ namespace RaythosAerospaceMVC.Repository
             if (user != null)
             {
                 // If the user is found and the password is correct
+                //user.Password = null;
+                //user.ConfirmPassword = null;
+                return user;
+            }
+
+            // Return null if the user is not found or the password is incorrect
+            return null;
+        }
+
+        public async Task<User> UpdateUserByIdAsync(int id)
+        {
+            // Find the user by email (assuming email is unique)
+            var user = _context.Users.SingleOrDefault(u => u.Id == id);
+
+
+
+            if (user != null)
+            {
+                // If the user is found and the password is correct
                 user.Password = null;
                 user.ConfirmPassword = null;
                 return user;

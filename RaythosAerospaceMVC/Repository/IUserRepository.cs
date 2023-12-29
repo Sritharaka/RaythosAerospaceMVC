@@ -19,7 +19,8 @@ namespace RaythosAerospaceMVC.Repository
 
         Task<IQueryable<User>> GetUsersByDateRange(DateTime? fromDate, DateTime? toDate);
 
+        Task<User> UpdateUserByIdAsync(int id);
 
-
+        
     }
 }

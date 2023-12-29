@@ -150,7 +150,7 @@ namespace RaythosAerospaceMVC.Controllers
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
 
-            var aircraft =  await _userRepository.GetUserByIdAsync(userId);
+            var aircraft =  await _userRepository.UpdateUserByIdAsync(userId);
             if (aircraft == null)
             {
                 return View("UserUpdate");
@@ -225,6 +225,19 @@ namespace RaythosAerospaceMVC.Controllers
             return PartialView("_UserDetailsPartial", existingUser);
         }
 
+        public async Task<IActionResult> UserSideBar()
+        {
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve from session
+
+            var existingUser = await _userRepository.GetUserByIdAsync(userId);
+            if (existingUser == null)
+            {
+                //return RedirectToAction("index", "Home"); // Redirect to Home/Index upon successful login
+            }
+            return PartialView("_UserSideBarPartial", existingUser);
+        }
+
 
         public async Task<IActionResult> _DisplayUserTable(int? page)
         {
@@ -246,7 +259,7 @@ namespace RaythosAerospaceMVC.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var existingUser = await _userRepository.GetUserByIdAsync(id);
+            var existingUser = await _userRepository.UpdateUserByIdAsync(id);
             if (existingUser == null)
             {
                 return NotFound();

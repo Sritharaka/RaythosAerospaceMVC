@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     Layout = null; // No layout initially
 }
 
@@ -8,6 +9,8 @@
     <!-- Add your meta tags, title, styles, and scripts here -->
     <link rel="stylesheet" href="~/css/site.css" /> <!-- Include CSS reference here -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add this line to the <head> section of your HTML -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
 
@@ -19,7 +22,7 @@
         .sidebar-light {
             width: 10%;
             float: left;
-            height: 2000px;
+            height: 2500px;
         }
 
         #content {
@@ -39,7 +42,7 @@
             background-color: #f4f4f4;
             padding: 10px;
             border: 1px solid #ddd;
-            height: 2000px;
+            height: 2500px;
         }
 
         .nav-pills li {
@@ -65,6 +68,38 @@
             vertical-align: middle; 
             /*margin-left: -50px;*/
         }
+
+
+
+        /* Footer */
+        .footer {
+            position: relative;
+        }
+
+        .container1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Copyright text */
+        .copyright {
+            margin-left:635px;
+        }
+
+        /* Social media icons */
+        .social-icons {
+            display: flex;
+            gap: 10px; /* Adjust the gap between icons */
+            margin-right:150px;
+        }
+
+        .social-icon {
+            color: white;
+            font-size: 20px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -114,10 +149,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 sidebar-light" id="hideclass">
-                <!-- Left Sidebar -->
-                @*<h3>Left Sidebar</h3>*@
-                <!-- Your sidebar content -->
-                <ul class="nav flex-column">
+           
+              @*  <ul class="nav flex-column">
                     <li class="nav-item" >
                         <a href="@Url.Action("Index", "Home")" id="btnHome" class="btn btn-outline-primary btn-block">
                             <img src="~/images/home.gif" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-100px">
@@ -173,13 +206,10 @@
                             Reports
                         </a>
                     </li>
-             @*       <li class="nav-item" >
-                        <a href="@Url.Action("Login", "User")" id="btnLogout" class="btn btn-outline-primary btn-block">
-                            <img src="~/images/logout.png" alt="Icon" width="20" height="20" class="mr-2" style="margin-left:-93px">
-                            Logout
-                        </a>
-                    </li>*@
-                </ul>
+                </ul>*@
+                <div id="userSideBarContainer">
+                    <!-- User details will be populated here -->
+                </div>
             </div>
 
 
@@ -193,11 +223,21 @@
     </div>
 
     <footer class="footer mt-auto py-3 bg-dark text-white">
-        <div class="container text-center">
-            <!-- Footer content -->
-            <p>&copy; 2024 Aerospace. All rights reserved.</p>
+        <div class="container1 d-flex justify-content-between align-items-center">
+            <!-- Copyright text -->
+            <p class="copyright mb-0">&copy; 2024 Aerospace. All rights reserved.</p>
+
+            <!-- Social media icons -->
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+
+            </div>
         </div>
     </footer>
+
 
     <script src="~/bundles/jquery"></script>
     <script src="~/bundles/bootstrap"></script>
@@ -209,6 +249,25 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Include jQuery -->
+
+    <script>
+        $(document).ready(function () {
+            // Call UserDetails method using AJAX
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("UserSideBar", "User")", // Replace ControllerName with your actual controller
+                success: function (data) {
+                    // Assuming data contains user details HTML
+                    // Bind the received data to the userDetailsContainer div
+                    $('#userSideBarContainer').html(data);
+                },
+                error: function (error) {
+                    // Handle any error that occurs during the AJAX call
+                    console.log("Error fetching user details:", error);
+                }
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function () {

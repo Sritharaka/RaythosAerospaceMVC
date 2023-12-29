@@ -6,6 +6,7 @@ using RaythosAerospaceMVC.Repository;
 using Rotativa.AspNetCore.Options;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using X.PagedList;
 
 namespace RaythosAerospaceMVC.Controllers
 {
@@ -48,6 +49,21 @@ namespace RaythosAerospaceMVC.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> _DisplayChartTable()
+        {
+
+            var viewModel = new ReportViewModel
+            {
+                Payments = await _paymentRepository.GetAllPayments(),
+                Inventory = await _inventoryRepository.GetAllInventoriesAsync(),
+                Aircrafts = await _aircraftRepository.GetAllAircraftsAsync(),
+                Users = await _userRepository.GetUserList(),
+                ManufacturingProgresses = await _manufacturingProgressRepository.GetAllAsync()
+            };
+
+            return PartialView("~/Views/Home/_DisplayChartTable.cshtml", viewModel);
         }
 
         public async Task<IActionResult> TablePartial(string tableName)
