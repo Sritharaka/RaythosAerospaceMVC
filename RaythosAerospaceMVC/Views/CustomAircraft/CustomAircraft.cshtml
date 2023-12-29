@@ -78,24 +78,46 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="form-group">
+                     @*   <div class="form-group">
                             <label asp-for="InteriorDesign">Interior Design</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-palette"></i></span>
                                 <input asp-for="InteriorDesign" id="InteriorDesign" name="InteriorDesign" class="form-control @(ViewData.ModelState.ContainsKey("InteriorDesign") && ViewData.ModelState["InteriorDesign"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.InteriorDesign ?? "")" />
                             </div>
                             <span asp-validation-for="InteriorDesign" class="text-danger"></span>
+                        </div>*@
+                        <div class="form-group">
+                            <label asp-for="InteriorDesign">Interior Design</label>
+                            <select asp-for="InteriorDesign" class="form-control" id="InteriorDesign" name="InteriorDesign">
+                                <option value="" selected>Select Interior Design</option>
+                                <option value="semi luxury">Semi luxury</option>
+                                <option value="luxury">Luxury</option>
+                                <option value="super luxury">Super luxury</option>
+                            </select>
+                            <span asp-validation-for="InteriorDesign" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="form-group">
+                  @*      <div class="form-group">
                             <label asp-for="SeatingType">Seating Type</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-list-stars"></i></span>
                                 <input asp-for="SeatingType" id="SeatingType" class="form-control @(ViewData.ModelState.ContainsKey("SeatingType") && ViewData.ModelState["SeatingType"].Errors.Count > 0 ? "border border-danger" : "")" required value="@(Model?.SeatingType ?? "")" />
                             </div>
                             <span asp-validation-for="SeatingType" class="text-danger"></span>
+                        </div>*@
+
+                        <div class="form-group">
+                            <label asp-for="SeatingType">Seating Type</label>
+                            <select asp-for="SeatingType" class="form-control" id="SeatingType" name="SeatingType">
+                                <option value="" selected>Select Seating Type</option>
+                                <option value="economy">Economy</option>
+                                <option value="business">Business</option>
+                                <option value="first class">First class</option>
+                            </select>
+                            <span asp-validation-for="SeatingType" class="text-danger"></span>
                         </div>
+
                     </div>
                 </div>
 
