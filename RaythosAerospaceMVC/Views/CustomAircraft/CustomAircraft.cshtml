@@ -90,9 +90,9 @@
                             <label asp-for="InteriorDesign">Interior Design</label>
                             <select asp-for="InteriorDesign" class="form-control" id="InteriorDesign" name="InteriorDesign">
                                 <option value="" selected>Select Interior Design</option>
-                                <option value="semi luxury">Semi luxury</option>
-                                <option value="luxury">Luxury</option>
-                                <option value="super luxury">Super luxury</option>
+                                <option value="Semi luxury">Semi luxury</option>
+                                <option value="Luxury">Luxury</option>
+                                <option value="Super luxury">Super luxury</option>
                             </select>
                             <span asp-validation-for="InteriorDesign" class="text-danger"></span>
                         </div>
@@ -111,9 +111,9 @@
                             <label asp-for="SeatingType">Seating Type</label>
                             <select asp-for="SeatingType" class="form-control" id="SeatingType" name="SeatingType">
                                 <option value="" selected>Select Seating Type</option>
-                                <option value="economy">Economy</option>
-                                <option value="business">Business</option>
-                                <option value="first class">First class</option>
+                                <option value="Economy">Economy</option>
+                                <option value="Business">Business</option>
+                                <option value="First class">First class</option>
                             </select>
                             <span asp-validation-for="SeatingType" class="text-danger"></span>
                         </div>
@@ -274,11 +274,11 @@
                 var newInteriorDesignValue = 0;
 
                 // Check if the value has changed and perform calculations accordingly
-                if (interiorDesign === "semi luxury" && interiorDesign != IntialInteriorDesign) {
+                if (interiorDesign === "Semi luxury" && interiorDesign != IntialInteriorDesign) {
                     newInteriorDesignValue = -2000;
-                } else if (interiorDesign === "super luxury" && interiorDesign != IntialInteriorDesign) {
+                } else if (interiorDesign === "Super luxury" && interiorDesign != IntialInteriorDesign) {
                     newInteriorDesignValue = 2000;
-                } else if (interiorDesign === "luxury" && interiorDesign != IntialInteriorDesign) {
+                } else if (interiorDesign === "Luxury" && interiorDesign != IntialInteriorDesign) {
                     newInteriorDesignValue = 1000;
                 } else if (interiorDesign != IntialInteriorDesign) {
                     newInteriorDesignValue = 500;
@@ -302,11 +302,11 @@
                 var newSeatingTypeValue = 0;
 
                 // Check if the value has changed and perform calculations accordingly
-                if (seatingType === "economy" && seatingType != IntialSeatingType) {
+                if (seatingType === "Economy" && seatingType != IntialSeatingType) {
                     newSeatingTypeValue = -5000;
-                } else if (seatingType === "business" && seatingType != IntialSeatingType) {
+                } else if (seatingType === "Business" && seatingType != IntialSeatingType) {
                     newSeatingTypeValue = 3000;
-                } else if (seatingType === "first class" && seatingType != IntialSeatingType) {
+                } else if (seatingType === "First class" && seatingType != IntialSeatingType) {
                     newSeatingTypeValue = 5000;
                 } else if (seatingType != IntialSeatingType) {
                     newSeatingTypeValue = 2000;
