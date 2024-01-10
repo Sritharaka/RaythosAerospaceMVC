@@ -557,28 +557,119 @@
 
         // Event listener for the download PDF button click
         // Event listener for the download PDF button click
+
+
+        //document.getElementById('downloadPDF').addEventListener('click', function () {
+        //    // Get the HTML content from #tableData
+        //    var element = document.getElementById('tableData');
+
+        //    // Get the inner HTML content of the element
+        //    var content = element.innerHTML;
+
+        //    // Define the PDF document structure
+        //    var docDefinition = {
+        //        content: [
+        //            { text: 'Generated PDF from HTML', style: 'header' },
+        //            { text: content, style: 'table' }
+        //        ],
+        //        styles: {
+        //            header: { fontSize: 18, bold: true },
+        //            table: { margin: [0, 20, 0, 20] }
+        //        }
+        //    };
+
+        //    // Create and download the PDF
+        //    pdfMake.createPdf(docDefinition).download('table.pdf');
+        //});
+
         document.getElementById('downloadPDF').addEventListener('click', function () {
             // Get the HTML content from #tableData
-            var element = document.getElementById('tableData');
-
+            var tableElement = document.getElementById('tableData');
             // Get the inner HTML content of the element
-            var content = element.innerHTML;
+            var content = tableElement.innerHTML;
 
-            // Define the PDF document structure
-            var docDefinition = {
-                content: [
-                    { text: 'Generated PDF from HTML', style: 'header' },
-                    { text: content, style: 'table' }
-                ],
-                styles: {
-                    header: { fontSize: 18, bold: true },
-                    table: { margin: [0, 20, 0, 20] }
+            var selectedReport = document.getElementById('tableSelect').value;
+
+            if (!selectedReport) {
+                alert('Please select a report');
+            }
+
+            var reportName = selectedReport; // Set the selected value as the report name
+
+            try {
+                // Check if the content is a valid table structure
+                var tempElement = document.createElement('table');
+                tempElement.innerHTML = content;
+                if (tempElement === null || tempElement.tagName.toLowerCase() !== 'table') {
+                    throw new Error('Invalid table structure');
                 }
-            };
 
-            // Create and download the PDF
-            pdfMake.createPdf(docDefinition).download('table.pdf');
+                var headers = extractHeaders(tempElement);
+                var tableBody = buildTableBody(tempElement);
+
+                // Define the PDF document structure with landscape orientation and column widths
+                var docDefinition = {
+                    content: [
+                        { text: reportName + ' Report ', style: 'header' },
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: Array.from({ length: headers.length }).fill(100), // Set column widths to 100px for each column
+                                body: [headers, ...tableBody]
+                            },
+                            layout: {
+                                fillColor: function (rowIndex, node, columnIndex) {
+                                    return (rowIndex % 2 === 0) ? '#f2f2f2' : null; // Alternate row colors
+                                }
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: { fontSize: 18, bold: true },
+                        tableHeader: { bold: true, fillColor: '#CCCCCC' }
+                    },
+                    pageOrientation: 'landscape' // Set PDF orientation to landscape
+                };
+
+                // Create and download the PDF
+                pdfMake.createPdf(docDefinition).download('table.pdf');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+            }
         });
+
+        // Function to extract table headers
+        function extractHeaders(tableElement) {
+            var headerData = [];
+
+            if (tableElement.rows.length > 0) {
+                var headers = tableElement.rows[0].cells;
+
+                for (var i = 0; i < headers.length; i++) {
+                    headerData.push({ text: headers[i].innerText, style: 'tableHeader' });
+                }
+            }
+
+            return headerData;
+        }
+
+        // Function to build the table body from HTML content
+        function buildTableBody(tableElement) {
+            var body = [];
+
+            for (var i = 1; i < tableElement.rows.length; i++) {
+                var rowData = [];
+
+                for (var j = 0; j < tableElement.rows[i].cells.length; j++) {
+                    rowData.push({ text: tableElement.rows[i].cells[j].innerText });
+                }
+
+                body.push(rowData);
+            }
+
+            return body;
+        }
+
 
      
     </script>
