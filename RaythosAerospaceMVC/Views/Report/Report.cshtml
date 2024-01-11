@@ -692,12 +692,19 @@
         var usersData = @Html.Raw(Json.Serialize(Model.Users));
         var manufacturingProgressData = @Html.Raw(Json.Serialize(Model.ManufacturingProgresses));
 
+
+        // Filter the array based on ManufacturingComplete == false
+        var incompleteProgressArray = manufacturingProgressData.filter(function (progress) {
+            return !progress.manufacturingComplete;
+        });
+
+
         // Get counts from each table data
         var paymentsCount = paymentsData.length;
         var inventoryCount = inventoryData.length;
         var aircraftsCount = aircraftsData.length;
         var usersCount = usersData.length;
-        var manufacturingProgressCount = manufacturingProgressData.length;
+        var manufacturingProgressCount = incompleteProgressArray.length;
 
         // Display the counts
         console.log('Payments Count:', paymentsCount);

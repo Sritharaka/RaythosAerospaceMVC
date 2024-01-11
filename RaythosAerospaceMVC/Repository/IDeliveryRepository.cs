@@ -12,5 +12,7 @@ namespace RaythosAerospaceMVC.Repositories
         Task AddAsync(Delivery delivery);
         Task UpdateAsync(Delivery delivery);
         Task DeleteAsync(Delivery delivery);
+        Task<bool> SendDeliveryAsync(Delivery Delivery);
+
     }
 }

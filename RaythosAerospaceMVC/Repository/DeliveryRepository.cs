@@ -113,6 +113,7 @@ namespace RaythosAerospaceMVC.Repositories
 
 
             await SendContactEmail(progress);
+            await SendDeliveryAsync(progress);
 
         }
 
@@ -147,6 +148,35 @@ namespace RaythosAerospaceMVC.Repositories
                 // You might want to log the error using a proper logging library
                 // and consider returning an error response to the user if applicable
             }
+        }
+
+        public async Task<bool> SendDeliveryAsync(Delivery Delivery)
+        {
+
+            string userId = "2609511";
+            string apiKey = "gQ3MtBPvVecLY9s7OeDb";
+            string senderId = "NotifyDEMO";
+            string recipientNumber = "94777386791"; // Replace with recipient's phone number
+            string message = "Raythos Aerospace System Aircraft Delivery Success : " + Delivery.CardHolderName + "\nDelivery Date : " +  Delivery.DeliveryDate + "\nAirport City : " + Delivery.AirportCity; // Replace with your OTP message
+
+            using (var httpClient = new HttpClient())
+            {
+                var sendSmsUrl = $"https://app.notify.lk/api/v1/send?user_id={userId}&api_key={apiKey}&sender_id={senderId}&to={recipientNumber}&message={message}";
+
+                var response = await httpClient.GetAsync(sendSmsUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("SMS sent successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to send SMS. Status code: " + response.StatusCode);
+                }
+
+                return response.IsSuccessStatusCode;
+            }
+
         }
 
         public async Task DeleteAsync(Delivery Delivery)
