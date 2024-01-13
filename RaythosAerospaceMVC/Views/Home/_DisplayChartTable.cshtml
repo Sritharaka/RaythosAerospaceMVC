@@ -595,12 +595,25 @@
         var usersData = @Html.Raw(Json.Serialize(Model.Users));
         var manufacturingProgressData = @Html.Raw(Json.Serialize(Model.ManufacturingProgresses));
 
+        // Filter the array based on ManufacturingComplete == false
+        var incompleteProgressArray = manufacturingProgressData.filter(function (progress) {
+            return progress.manufacturingComplete;
+        });
+
+        // Filter the array based on the condition
+        const filteredInventory = inventoryData.filter(item => item.inventoryEngines > 1);
+
+        // Filter the array based on the condition
+        const filteredCustomers = usersData.filter(item => item.roleId == 2);
+
+        
+
         // Get counts from each table data
         var paymentsCount = paymentsData.length;
-        var inventoryCount = inventoryData.length;
+        var inventoryCount = filteredInventory.length;
         var aircraftsCount = aircraftsData.length;
-        var usersCount = usersData.length;
-        var manufacturingProgressCount = manufacturingProgressData.length;
+        var usersCount = filteredCustomers.length;
+        var manufacturingProgressCount = incompleteProgressArray.length;
 
         // Display the counts
         console.log('Payments Count:', paymentsCount);
@@ -610,8 +623,8 @@
         console.log('Manufacturing Progress Count:', manufacturingProgressCount);
 
         // Creating labels and counts for chart
-        var labels = ['Payments', 'Inventory', 'Aircrafts', 'Users'];
-        var counts = [paymentsCount, inventoryCount, aircraftsCount, usersCount];
+        var labels = ['Payments', 'Aircrafts Stock', 'Aircrafts', 'Customers', 'Manufactured'];
+        var counts = [paymentsCount, inventoryCount, aircraftsCount, usersCount, manufacturingProgressCount];
 
         var ctx = document.getElementById('tableCounts').getContext('2d');
 
@@ -627,14 +640,14 @@
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
-                        //'rgba(153, 102, 255, 0.2)'
+                        'rgba(0, 191, 255, 0.2)',  // Deep Sky Blue color added
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
                         'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)',
-                        //'rgba(153, 102, 255, 1)'
+                        'rgba(0, 191, 255, 1)',  // Deep Sky Blue color added
                     ],
                     borderWidth: 1
                 }]

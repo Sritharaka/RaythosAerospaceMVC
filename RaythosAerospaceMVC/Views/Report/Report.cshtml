@@ -698,10 +698,14 @@
             return !progress.manufacturingComplete;
         });
 
+        // Filter the array based on the condition
+        const filteredInventory = inventoryData.filter(item => item.inventoryEngines > 1);
+
+
 
         // Get counts from each table data
         var paymentsCount = paymentsData.length;
-        var inventoryCount = inventoryData.length;
+        var inventoryCount = filteredInventory.length;
         var aircraftsCount = aircraftsData.length;
         var usersCount = usersData.length;
         var manufacturingProgressCount = incompleteProgressArray.length;
