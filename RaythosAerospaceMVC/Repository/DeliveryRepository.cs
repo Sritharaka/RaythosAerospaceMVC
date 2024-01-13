@@ -157,7 +157,9 @@ namespace RaythosAerospaceMVC.Repositories
             string apiKey = "gQ3MtBPvVecLY9s7OeDb";
             string senderId = "NotifyDEMO";
             string recipientNumber = "94777386791"; // Replace with recipient's phone number
-            string message = "Raythos Aerospace System Aircraft Delivery Success : " + Delivery.CardHolderName + "\nDelivery Date : " +  Delivery.DeliveryDate + "\nAirport City : " + Delivery.AirportCity; // Replace with your OTP message
+            string message = "Raythos Aerospace System Aircraft Delivery Success  " + "\nCustomer Name : " + Delivery.CardHolderName + "\nDelivery Date : " +  Delivery.DeliveryDate + "\nAirport City : " + Delivery.AirportCity; // Replace with your OTP message
+
+            Console.WriteLine(message);
 
             using (var httpClient = new HttpClient())
             {
