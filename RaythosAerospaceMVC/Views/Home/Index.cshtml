@@ -22,34 +22,49 @@
     <div id="displayChartTable">
     </div>
     <div class="container mt-4" style="margin-left: 40px; width:1150px;">
-        <h4 style="margin-bottom: 40px; margin-top:40px;">Aircraft List</h4>
+        <h4 style="margin-top:40px;">Aircraft List</h4>
+
+        <!-- Search filter -->
+        <label for="searchInput" class="form-label" style="margin-left: 68%;">Search Aircraft</label>
+        <div class="mb-3" style="position: relative;">
+            <input type="text" class="form-control" id="searchInput" placeholder="Enter Aircraft Name or Manufacturer"
+                   style="width: 32%; box-sizing: border-box; position: absolute; top: 0; right: 0;">
+        </div>
 
 
-        <div class="row">
+        <div class="row" style="margin-top:5%;">
             @foreach (var aircraft in Model)
             {
                 var aircraftId = @aircraft.Id;
-                <div class="col-md-4 mb-4">
-                    <div class="card" style="background-color:azure">
-                        <!-- Aircraft Image -->
-                        <img src="@Url.Content("/" + aircraft.ImageUrl)" class="card-img-top" alt="Aircraft Image" style="height: 200px; background-color:white">
-                        <div class="card-body">
-                            <h5 class="card-title"> <i class="bi bi-airplane"></i> @aircraft.ModelName </h5>
-                            <p class="card-text"> <i class="bi bi-building"></i> Manufacturer: @aircraft.Manufacturer </p>
-                            <!-- Displaying aircraft details with icons -->
-                            <p class="card-text"><i class="bi bi-speedometer2"></i> Maximum Speed: @aircraft.MaximumSpeed km/h</p>
-                            <p class="card-text"><i class="bi bi-person"></i> Seating Capacity: @aircraft.SeatingCapacity</p>
-                            <p class="card-text"><i class="bi bi-currency-dollar"></i> Price: <span style="color: maroon;">@aircraft.BasePrice USD</span></p>
-                            <!-- Add other relevant fields you want to display -->
-                            <!-- Example of a button to view more details -->
-                            <a href="/CustomAircraft/CustomAircraft/@aircraftId" class="btn btn-primary btn-block">
-                                <i class="bi bi-eye-fill"></i> View Details
-                            </a>
+
+                <!-- Filter the aircraft based on the search input -->
+                @if (string.IsNullOrEmpty(ViewBag.SearchTerm) ||
+               aircraft.ModelName.Contains(ViewBag.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+               aircraft.Manufacturer.Contains(ViewBag.SearchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card" style="background-color:azure">
+                            <!-- Aircraft Image -->
+                            <img src="@Url.Content("/" + aircraft.ImageUrl)" class="card-img-top" alt="Aircraft Image" style="height: 200px; background-color:white">
+                            <div class="card-body">
+                                <h5 class="card-title"> <i class="bi bi-airplane"></i> @aircraft.ModelName </h5>
+                                <p class="card-text"> <i class="bi bi-building"></i> Manufacturer: @aircraft.Manufacturer </p>
+                                <!-- Displaying aircraft details with icons -->
+                                <p class="card-text"><i class="bi bi-speedometer2"></i> Maximum Speed: @aircraft.MaximumSpeed km/h</p>
+                                <p class="card-text"><i class="bi bi-person"></i> Seating Capacity: @aircraft.SeatingCapacity</p>
+                                <p class="card-text"><i class="bi bi-currency-dollar"></i> Price: <span style="color: maroon;">@aircraft.BasePrice USD</span></p>
+                                <!-- Add other relevant fields you want to display -->
+                                <!-- Example of a button to view more details -->
+                                <a href="/CustomAircraft/CustomAircraft/@aircraftId" class="btn btn-primary btn-block">
+                                    <i class="bi bi-eye-fill"></i> View Details
+                                </a>
 
 
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>
@@ -62,6 +77,8 @@
 
     <script>
         $(document).ready(function () {
+
+
             // Make an AJAX request to load the chart display
             $.ajax({
                 url: '/Report/_DisplayChartTable', // Update the URL to your endpoint that returns the chart display partial view
@@ -73,8 +90,56 @@
                     console.error('Error loading chart display');
                 }
             });
+
+
+
         });
     </script>
-   
+
+    <script>
+        $(document).ready(function () {
+
+            // Search input event listener
+            $('#searchInput').on('input', function () {
+                filterAircraftList();
+            });
+
+            function loadAircraftList() {
+                // Make an AJAX request to load the aircraft list
+                $.ajax({
+                    url: '/Home/Index', // Update the URL to your endpoint that returns the aircraft list
+                    type: 'GET',
+                    success: function (data) {
+                        $('#displayAircraftList').html(data);
+                        filterAircraftList(); // Apply initial filtering
+                    },
+                    error: function () {
+                        console.error('Error loading aircraft list');
+                    }
+                });
+            }
+
+            function filterAircraftList() {
+                // Get the search term
+                var searchTerm = $('#searchInput').val().toLowerCase();
+
+                // Filter the aircraft based on the search input
+                $('.card').each(function () {
+                    var aircraftName = $(this).find('.card-title').text().toLowerCase();
+                    var manufacturer = $(this).find('.card-text:eq(0)').text().toLowerCase();
+
+                    // Show/hide the card based on the filter
+                    if (aircraftName.includes(searchTerm) || manufacturer.includes(searchTerm)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
 </body>
 </html>
