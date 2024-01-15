@@ -1,0 +1,183 @@
+﻿<!-- Views/Shared/_ChatUI.cshtml -->
+<style>
+    /* Add your custom styles here */
+    #chatButton {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 1000; /* Ensure the chat button is above other elements */
+    }
+
+    #chatModal {
+        display: none;
+        position: fixed;
+        bottom: 80px; /* Adjust this value to leave space for the button */
+        right: 20px;
+        max-width: 400px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        z-index: 999; /* Ensure the chat modal is above other elements */
+    }
+
+    #closeChatModal {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 1px;
+        margin-top:-12px;
+    }
+
+    .userImage {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .chatbotImage {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    #messages {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        height: 200px;
+        overflow-y: scroll;
+    }
+
+    #inputMessageContainer {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    #inputMessage {
+        width: 70%;
+        padding: 8px;
+        margin-right: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="chatButton" onclick="toggleChatModal()">ChatBot</div>
+
+<div id="chatModal">
+    <span id="closeChatModal" onclick="closeChatModal()">X</span>
+
+   
+
+    <!-- Chat UI content goes here -->
+    <ul id="messages"></ul>
+
+    <!-- Input message container -->
+    <div id="inputMessageContainer">
+        <input id="inputMessage" autocomplete="off" />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+
+    function toggleChatModal() {
+        var chatButton = document.getElementById('chatButton');
+        var modal = document.getElementById('chatModal');
+
+        // Hide the chat button
+        chatButton.style.display = 'none';
+
+        // Show the modal
+        modal.style.display = 'block';
+
+    }
+
+    function closeChatModal() {
+        var chatButton = document.getElementById('chatButton');
+        var modal = document.getElementById('chatModal');
+
+        // Show the chat button
+        chatButton.style.display = 'block';
+
+        // Hide the modal
+        modal.style.display = 'none';
+    }
+
+
+    function sendMessage() {
+        var messageInput = document.getElementById('inputMessage');
+        var message = messageInput.value.trim(); // Trim leading and trailing whitespaces
+
+        // Check if the message is not empty
+        if (message.trim() === '') {
+            // Alert the user or handle the empty message case as needed
+            alert('Please enter a message before sending.');
+            return;
+        }
+
+        addMessage("User", message);
+
+        // Make an AJAX request to the ChatController to get the bot's response
+        $.ajax({
+            type: 'POST',
+            url: '/Chat/GetBotResponse', // Update the URL based on your controller and action
+            data: { userMessage: message },
+            success: function (botResponse) {
+                addMessage("Bot", botResponse);
+                messageInput.value = '';
+
+            },
+            error: function () {
+                console.error('Error getting bot response');
+            }
+        });
+    }
+
+    function addMessage(sender, text) {
+        var ul = document.getElementById('messages');
+        var li = document.createElement('li');
+        li.appendChild(createImageElement(sender));
+        li.appendChild(document.createTextNode(text));
+        ul.appendChild(li);
+    }
+
+    function getBotResponse(userMessage) {
+        // Make an AJAX request to the bot API or use WebSocket to get the bot's response
+        // For simplicity, we'll use a hard-coded response here
+        return "I'm a simple Q&A bot. Ask me about aircraft!";
+    }
+
+    function createImageElement(sender) {
+        var img = document.createElement('img');
+        img.className = sender === 'User' ? 'userImage' : 'chatbotImage';
+        img.src = sender === 'User' ? '@Url.Content("~/images/profile.png")' : '@Url.Content("~/images/chatbot.png")';
+        img.alt = sender + ' Image';
+        return img;
+    }
+</script>
